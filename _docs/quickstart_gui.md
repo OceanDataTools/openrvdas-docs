@@ -51,10 +51,10 @@ ports have names/locations like `/tmp/tty_s330` (where we will, for example, fin
     ![Initial Web Console](../assets/images/nbp_initial.png)
 
 
-6. Select the Log in link and log in as user __rvdas__ (or whichever user you created). You should now see a "Load configuration file" button. Select it, and navigate to load the sample cruise definition file at ``test/NBP1406/NBP1406_cruise.yaml``.<p>
+6. Select the Log in link and log in as user __rvdas__ (or whichever user you created). You should now see a "Load configuration file" button. Select it, and navigate to load the sample cruise definition file at ``test/NBP1406/NBP1406_cruise.yaml``. A [cruise definition file]({{ "/cruise_definition_files/" | relative_url }}), describes what loggers exist, what logger configurations are associated with each, and how configurations are grouped into cruise "modes" - in short, everything that appears on the GUI console once you hit "Load".
 
 
-7. At this point you should see a table of loggers, all in configuration "off". A logger configuration is a set of instructions for what a logger should do with the data coming from its source. The configurations are defined in the cruise definition file you loaded, and typically each logger will have several configurations defined.<br><br>
+7. At this point you should see a table of loggers, all in configuration "off". A logger configuration is a set of instructions for what a logger should do with the data coming from its source. The configurations are defined in the cruise definition file you loaded, and typically each logger will have several configurations defined.
 
     Configurations can be as simple as writing the
  received data to a file or UDP port, or as complicated as parsing it, performing mathematical transformations on the values

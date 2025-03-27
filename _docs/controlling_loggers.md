@@ -1,13 +1,14 @@
 ---
 permalink: /controlling_loggers/
-title: "Controlling Loggers with the Logger Manager"
+title: "Controlling Loggers"
 layout: single
 toc: true
 toc_label: "Contents"
 toc_icon: "list"
 toc_sticky: true  # Makes the TOC stick on scroll
 ---
-This page describes operation of the [Logger Manager](https://github.com/OceanDataTools/openrvdas/blob/master/server/logger_manager.py), a multifaceted script that allows running, controlling and monitoring entire sets of loggers.
+This page describes 1) operation of the [Logger Manager](https://github.com/OceanDataTools/openrvdas/blob/master/server/logger_manager.py), a multifaceted script that allows running, controlling and monitoring entire sets of loggers, 2) the standard GUI and command line interfaces for controlling the Logger Manager and
+3) Alternative methods for controlling the Logger Manager .
 
 # The High-Order Bits
 
@@ -68,7 +69,7 @@ Before we dive into the use of ``logger_manager.py``, it's worth pausing for a m
       knud: knud-file/net/db 
       rtmp: rtmp-file/net/db
 ```
--   **Cruise configuration** - (or just "configuration" when we're being sloppy). This is the file/JSON/YAML structure that contains everything the logger manager needs to know about running a cruise. In addition to containing cruise metadata (cruise id, provisional start and ending dates), a cruise configuration file (such as in [test/NBP1406/NBP1406\_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml)), contains a dict of all the logger configurations that are to be run on a particular vessel deployment, along with definitions for all the modes into which those logger configurations are grouped.
+-   **Cruise definition** - (or occasionally "cruise configuration" if we're being sloppy). This is the file/JSON/YAML structure that contains everything the logger manager needs to know about running a cruise. It typically contains a dict of cruise metadata (cruise id, provisional start and ending dates), a dict of all the logger configurations that are to be run on a particular vessel deployment, along with definitions for all the modes into which those logger configurations are grouped. See the [Cruise Definition Files]({{ "/cruise_definition_files/" | relative_url }}) document for a detailed description of the structure of cruise definitions. 
   
 It is worth noting that strictly speaking, a "logger" does not exist as a separate entity in OpenRVDAS. It is just a convenient way of thinking about a set of configurations that are responsible for a given data stream, e.g. Knudsen data, or a GPS feed. This is evident when looking at the [sample cruise definition file](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml), as the logger definition (`knud`) is just a list of the configurations that are responsible for handling the data that comes in from a particular serial port.
 
@@ -79,7 +80,7 @@ knud:
   - knud-net,
   - knud-file/net/db
 ```
-Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml) may be useful for newcomers to the system. _(For a deeper dive, please refer to [OpenRVDAS Configuration Files]({{ "/configuration_files/" | relative_url }}))._
+Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml) may be useful for newcomers to the system. _(For a deeper dive, please refer to [Cruise Definition Files]({{ "/cruise_definition_files/" | relative_url }}))._
 
 ## What the logger manager does
 
@@ -97,7 +98,7 @@ Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cru
         --mode monitor
   ```
 
-* It consults the database to determine what loggers, logger configurations and cruise modes exist, and which cruise mode or combination of logger configurations the user wishes to have running and starts/stops logger processes as appropriate. It records the new logger states in the database. Once started, it monitors the health of theses processes, recording failures in the database and restarting processes as necessary.
+* It consults the database to determine what loggers, logger configurations and cruise modes exist, and which cruise mode or combination of logger configurations the user wishes to have running and starts/stops logger processes as appropriate. It records the new logger states in the database. Once started, it monitors the health of these processes, recording failures in the database and restarting processes as necessary.
 
 * In the default installation, works with Django to provide a web console that provides logger status and the ability to switch cruise modes, start, stop or change logger configurations.
 
@@ -275,11 +276,28 @@ You will have noticed that many of the examples in this documentation make use o
 
 Please see the [GUI Quickstart]({{ "/quickstart_gui/" | relative_url }}) document for detailed instructions on operating the web interface and the [server/README.md](https://github.com/OceanDataTools/openrvdas/blob/master/server/README.md) file and [logger_manager.py](https://github.com/OceanDataTools/openrvdas/blob/master/server/logger_manager.py) headers for the most up-to-date information on running logger\_manager.py.
 
-# RESTful API
+# Alternative GUIs
 
-In addition to the default Django-based GUI, as of April 2024, OpenRVDAS also provides HTTP/HTTPS access to a RESTful API.
-The full schema may be retrieved in YAML format by querying `http://openrvdas/api/schema` (or whatever your machine name is), but
-the currently-supported endpoints are:
+In addition to the default Django-based GUI, OpenRVDAS provides mechanisms for alternative front ends. Several experimental alternatives have been implemented, and support is built in for anyone who wants to create their own.
+
+## SQLite front end
+
+Code and documentation for a Django-free, SQLite-based GUI created by Kevin Pedigo is available at https://github.com/OceanDataTools/sqlite_gui. HTML pages in `sqlite_gui/html` trigger python CGI scripts (in `sqlite_gui/cgi-bin`) that write to a backing SQLite database. Javascript loaded by the HTML pages subscribes to and retrieves data from the Cached Data Server that it uses to populate the page with logger statuses.
+
+![NIWA front end](../assets/images/sqlite_gui.png)
+
+## React-based front end
+
+Another set of front ends, at https://github.com/yoLewshi/DAS-UI, were created by Lewis Wilke of NIWA using _React_ for the the displays and calling Django endpoints. Please see [the project's README.md file](https://github.com/yoLewshi/DAS-UI?tab=readme-ov-file#readme) for details.
+
+![NIWA front end](../assets/images/niwa_gui.png)
+
+
+![REACT logger](../assets/images/niwa_loggers.png)
+
+## Creating your own front end
+
+Django provides HTTP/HTTPS access to a RESTful API. The full schema may be retrieved in YAML format by querying `http://openrvdas/api/schema` (or whatever your machine name is), but the currently-supported endpoints are:
 ```
 api/cruise-configuration/
 api/select-cruise-mode/
@@ -288,7 +306,35 @@ api/delete-configuration/
 api/edit-logger-config/
 api/load-configuration-file/
 ```
+This functionality simplifies the creation of custom control interfaces to supplement or replace the standard Django GUI. The desired changes in cruise modes or logger configurations can be made by HTTP/HTTPs calls to the RESTful API, and Logger and LoggerManager statuses can be monitored by subscribing to messages beginning with `status:` and `stderr:` from the CachedDataServer. 
 
-This functionality simplifies the creation of custom control interfaces to supplement or replace the standard Django GUI. Logger and LoggerManager statuses can
-be monitored by substribing to messages beginning with `status:` and `stderr:` from the CachedDataServer, and desired changes in cruise modes or logger
-configurations can be made by HTTP/HTTPs calls to the RESTful API.
+### Adding your own endpoints
+
+If the existing API endpoints are inadequate for your needs, you can extend the functionality of the OpenRVDAS API by writing your own functions following the structure of existing APIViews and attaching them to the schema and paths found in [django_gui/api_views.py](https://github.com/OceanDataTools/openrvdas/blob/master/django_gui/api_views.py).
+
+The recommended approach to avoid conflicts when merging changes from the main repo is to import functions from your contrib or local area and include those in the custom_paths or get_custom_schema methods as highlighted by comments in the code.
+```
+# import and add your own API routes here, should be a list matching urlpatterns below
+custom_paths = []
+# custom_paths += ship_specific_paths()
+
+...
+
+urlpatterns = [
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    
+    # These are the login and logout restframework urls
+    path('', include('rest_framework.urls', namespace='rest_framework')),
+    # Token Auth
+    path('obtain-auth-token/', CustomAuthToken.as_view(), name="obtain-auth-token"),
+    # These are the DRF API stubbs
+    path('', ApiRoot.as_view()),
+    ...
+    path('reload-current-configuration/', CruiseReloadCurrentConfigurationAPIView.as_view(), name='reload-current-configuration'),
+    path('select-cruise-mode/', CruiseSelectModeAPIView.as_view(), name='select-cruise-mode'),
+] + custom_paths
+```
+
+Your custom endpoints should then be visible in the swagger api documentation at /api/schema/swagger-ui/ where you can test them.

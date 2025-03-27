@@ -312,7 +312,7 @@ You may also load a single configuration from a complete cruise definition file 
 ```
 This functionality has proven useful for debugging a logger that is dying mysteriously.
 
-Please see [OpenRVDAS Configuration Files]({{ "/configuration_files/" | relative_url }}) for
+Please see [OpenRVDAS Configuration Files]({{ "/logger_configuration_files/" | relative_url }}) for
 a more complete description of the configuration file model, and
 [simple_logger.py](https://github.com/OceanDataTools/openrvdas/blob/master/test/configs/simple_logger.yaml),
 [composed_logger.py](https://github.com/OceanDataTools/openrvdas/blob/master/test/configs/composed_logger.yaml) and

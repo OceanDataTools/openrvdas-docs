@@ -32,7 +32,7 @@ The project code repository is at [https://github.com/oceandatatools/openrvdas](
 Other relevant documents are:
 
 * [The Listener Script - listen.py](/listen_py/) - how to use OpenRVDAS's core utility script
-* [Configuration Files](/configuration_files/) - how to define configuration files to simplify running loggers with listen.py
+* [Logger Configuration Files](/logger_configuration_files/) - how to define configuration files to simplify running loggers with listen.py
 * [OpenRVDAS Components](/components/) - what components exist and what they do
 * [Simulating Live Data](/simulating_live_data/) - using the simulate_data.py script to simulate a live system using stored data for development and testing
 * [Grafana/InfluxDB-based Displays](/grafana_displays/) - an introduction to using InfluxDB and Grafana for displaying data

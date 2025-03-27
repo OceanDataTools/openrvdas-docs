@@ -123,7 +123,7 @@ logger/listener/listen.py --config_file test/NBP1406/NBP1406_cruise.yaml:"gyr1->
 
 This functionality is especially handy when trying to debug new logger configurations.
 
-Again, use of listen.py script with and without configuration files is described in [The Listener Script]({{ "/listen_py/" | relative_url }}), and configuration files are described in detail in [OpenRVDAS Configuration Files]({{ "/configuration_files/" | relative_url }}).
+Again, use of listen.py script with and without configuration files is described in [The Listener Script]({{ "/listen_py/" | relative_url }}), and configuration files are described in detail in [OpenRVDAS Configuration Files]({{ "/logger_configuration_files/" | relative_url }}).
 
 Multiple loggers may be run together and controlled from the command line, via an API or a web interface using the logger\_manager.py and logger_runner.py scripts described in the [Controlling Loggers]({{ "/controlling_loggers/" | relative_url }}) document.
 

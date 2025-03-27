@@ -165,7 +165,7 @@ or execute
 ```
 logger/listener/listen.py --config_file gyr1_config.yaml
 ```
-from the command line to read the file and assemble the components as specified. Please see [OpenRVDAS Configuration Files]({{ "/configuration_files/" | relative_url }}) for more information on the syntax and use of configuration files.
+from the command line to read the file and assemble the components as specified. Please see [OpenRVDAS Configuration Files]({{ "/logger_configuration_files/" | relative_url }}) for more information on the syntax and use of configuration files.
 
 Note that not all implemented Reader, Transform and Writer components are recognized by ListenerFromLoggerConfig; please see the headers of [logger/listener/listen.py](https://github.com/OceanDataTools/openrvdas/blob/master/logger/listener/listen.py) for details.
 

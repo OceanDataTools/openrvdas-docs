@@ -1,6 +1,6 @@
 ---
-permalink: /configuration_files/
-title: "Configuration Files"
+permalink: /logger_configuration_files/
+title: "Logger Configuration Files"
 layout: single
 toc: true
 toc_label: "Contents"
@@ -53,9 +53,9 @@ writers:  # List of writers - these will be called in parallel
 
 The configuration is in [YAML format](https://yaml.org/). YAML is a strict
 superset of JSON, but is more concise and allows comments, so is preferred
-for readability.
+for readability. (Yes, logger configuration files __can__ be written as JSON strings if you need to.)
 
-In this case, the configuration definition specifies the following workflow:
+In the case above, the configuration definition specifies the following workflow:
 
 ![Dual output configuration](../assets/images/dual_writer.png)
 
@@ -105,9 +105,9 @@ diagnostic messages. Its format is the same as that for the normal
 
 ### Reader, Transform and Writer Documentation
 
-Machine-extracted documentation on which Reader, Transform and Writer components
+The code is generally the best documentation of itself, and we have tried to create detailed and extensive docstrings in the headers of each component in the `logger/[readers, transforms, writers]` directories. Machine-extracted documentation on Reader, Transform and Writer components
 are available, along with their arguments, is available in HTML format in the
-[doc/html](https://htmlpreview.github.io/?https://github.com/oceandatatools/openrvdas/blob/master/docs/html/index.html) directory of this project. The [README.md](https://github.com/OceanDataTools/openrvdas/blob/master/docs/html/README.md) file
+[doc/html](https://htmlpreview.github.io/?https://github.com/oceandatatools/openrvdas/blob/master/docs/html/index.html) directory of this project, though it may lag behind the code itself. The [README.md](https://github.com/OceanDataTools/openrvdas/blob/master/docs/html/README.md) file
 in that directory explains how the documentation is generated.
 
 ### Including Your Own Components
@@ -129,128 +129,8 @@ transforms:
 writers:
   class: TextFileWriter
 ```
+Please see the [Introduction to OpenRVDAS Components]({{ "/components/" | relative_url }}) document for details on creating your own Readers, Transforms and Writers.
 
-## Cruise Definitions
+## Managing Multiple Loggers and Configurations
 
-A full cruise definition file (such as
-[NBP1406_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml)) may define
-many logger configurations. They will be contained in a "configs" dict
-that maps from configuration names to the configuration definitions
-themselves.
-
-```
-configs:
-  gyr1->off:
-    name: gyr1->off  # config name; no readers/writers etc. means it's off
-  gyr1->net:
-    name: gyr1->net  # config name
-    readers:
-      class: SerialReader
-      kwargs:
-        baudrate: 9600
-        port: /dev/ttyr15
-    transforms:
-      ...
-    writers:
-      ...
-  gyr1->file/net/db:
-    name: gyr1->file/net/db  # config name
-    ...
-  ...
-```
-
-### Modes
-
-Typically, a vessel will have sets of logger configurations that
-should all be run together: which should be running when in port, when
-underway, etc.
-
-To accommodate easy reference to these modes of operation, we include
-a "mode" dictionary in our configuration file:. Each mode
-definition is a dict the keys of which are logger names, and the
-values are the names of the configurations that logger should be in
-when the mode is selected. To illustrate:
-
-```
-# Optional cruise metadata
-cruise:
-  id: NBP1406
-  start: "2014-06-01"  # Quoted so YAML doesn't auto-convert to a datetime
-  end: "2014-07-01"
-
-# Which configs are associated with which (abstract) logger
-loggers:
-  eng1:
-    configs:
-    - eng1->off
-    - eng1->net
-    - eng1->file/net/db
-  gyr1:
-    configs:
-    - gyr1->off
-    - gyr1->net
-    - gyr1->file/net/db
-  knud:
-    configs:
-    - knud->off
-    - knud->net
-    - knud->file/net/db
-  mwx1:
-    configs:
-    - mwx1->off
-    - mwx1->net
-    - mwx1->file/net/db
-  rtmp:
-    configs:
-    - rtmp->off
-    - rtmp->net
-    - rtmp->file/net/db
-  s330:
-    configs:
-    - s330->off
-    - s330->net
-    - s330->file/net/db
-
-# Definitions of the configs themselves
-configs:
-  gyr1->off:
-    ...
-  gyr1->net:
-    ...
-  gyr1->file/net/db:
-    ...
-  ...
-
-# Which configs should be running when in which mode
-modes:
-  off:
-    eng1: eng1->off
-    gyr1: gyr1->off
-    knud: knud->off
-    mwx1: mwx1->off
-    rtmp: rtmp->off
-    s330: s330->off
-  port:
-    eng1: eng1->net
-    gyr1: gyr1->net
-    knud: knud->off
-    mwx1: mwx1->net
-    rtmp: rtmp->off
-    s330: s330->net
-  underway:
-    eng1: eng1->file/net/db
-    gyr1: gyr1->file/net/db
-    knud: knud->file/net/db
-    mwx1: mwx1->file/net/db
-    rtmp: rtmp->file/net/db
-    s330: s330->file/net/db
-default_mode: "off"  # In quotes because 'off' is a YAML keyword
-```
-
-For accounting purposes, our convention is to include an empty
-configuration in the "configs" dict to denote the configuration of a
-logger that isn't running.
-
-Note also the additional (and optional) ```default_mode``` key
-in the cruise configuration. It specifies that, lacking any other
-information, which mode the system should be initialized to on startup.
+A typical vessel installation will necessitate running multiple loggers at once, each running a configuration specific to a particular sensor, and possibly also to a specific phase of a cruise. This set of loggers and configurations can be defined and managed via a [Cruise Definition File]({{ "/cruise_definition_files/" | relative_url }}), which is described in an accompanying document.

@@ -67,18 +67,9 @@ navdocs:
       - title: "GitHub Repository"
         icon: "fab fa-fw fa-github"
         url: "https://github.com/OceanDataTools/openrvdas"
-      - #      - title: "Working with Pages"
-#        url: /docs/pages/
-#      - title: "Working with Collections"
-#        url: /docs/collections/
-#      - title: "Helpers"
-#        url: /docs/helpers/
-#      - title: "Utility Classes"
-#        url: /docs/utility-classes/
-#
-#  - title: Extras
-#    children:
-#      - title: "Stylesheets"
-#        url: /docs/stylesheets/
-#      - title: "JavaScript"
-#        url: /docs/javascript/
+  - title: Extras
+    children:
+      - title: "RVTEC 2019 Introduction PDF"
+        icon: "fas fa-fw fa-link"
+        url: /assets/files/rvtec-2019-openrvdas-intro.pdf
+        external: true
