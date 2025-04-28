@@ -17,11 +17,6 @@ and its associated transform in
 [logger/transforms/parse\_transform.py](https://github.com/OceanDataTools/openrvdas/blob/master/logger/transforms/parse_transform.py)
 provide a tool for accomplishing this.
 
-(Note that there is also an earlier and now-deprecated module, the
-[NMEAParser]({{ "/nmea_parsing/" | relative_url }}), whose functionality has
-mostly been superceded by the RecordParser. A section at the end of
-this document describes its use.)
-
 The [RecordParser](https://github.com/OceanDataTools/openrvdas/blob/master/logger/utils/record_parser.py) class takes text
 records and parses them into structured data with named fields
 and timestamps.
@@ -58,6 +53,12 @@ Output:
   'fields': {'SeapCourseTrue': 213.66, 'SeapMode': 'A', 'SeapSpeedKt': 9.4},
   'timestamp': 1406851200.931}]
 ```
+
+An alternative parse transform, the [RegexParseTransform](https://github.com/OceanDataTools/openrvdas/blob/master/contrib/csiro/logger/transforms/regex_parse_transform.py), has been contributed to the repository in the [contrib/csiro/logger/transforms directory](https://github.com/OceanDataTools/openrvdas/blob/master/contrib/csiro/logger/transforms/regex_parse_transform.py), and may be moved to the main tree in the future.
+
+Note that there is also an earlier and now-deprecated module, the
+[NMEAParser]({{ "/nmea_parsing/" | relative_url }}), whose functionality has
+mostly been superceded by the RecordParser.
 
 ## Table of Contents
 

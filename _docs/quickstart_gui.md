@@ -22,7 +22,7 @@ _NOTE: For the purposes of this introduction, we will assume that your have name
    * answer "yes" that the data simulator should be installed and started on boot
 
 
-2. Assuming that the installation went smoothly (you received the 'Happy logging!' message at the end), open a web browser to [http://openrvdas:9001](http://openrvdas:9001). You should see the supervisord console indicating which scripts are running.
+2. Assuming that the installation went smoothly (you received the 'Happy logging!' message at the end), open a web browser to [http://localhost:9001](http://localhost:9001). You should see the supervisord console indicating which scripts are running.
 
  ![Supervisor Console](../assets/images/supervisor.png)
 
@@ -46,7 +46,7 @@ ports have names/locations like `/tmp/tty_s330` (where we will, for example, fin
    Do you see data? Hurrah!
 
 
-5. Now let's go to the OpenRVDAS web console at [http://openrvdas](http://openrvdas) and try working with the whole system. If all has gone well during the installation, you will see a cruise management startup page like the one below:
+5. Now let's go to the OpenRVDAS web console at [http://localhost](http://localhost) and try working with the whole system. If all has gone well during the installation, you will see a cruise management startup page like the one below:
 
     ![Initial Web Console](../assets/images/nbp_initial.png)
 
@@ -96,7 +96,7 @@ ports have names/locations like `/tmp/tty_s330` (where we will, for example, fin
 script, as described on the [Grafana/InfluxDB]({{ "/grafana_displays/" | relative_url }}) page.
 
 
-12. To verify that data are getting read and parsed, open a second browser window and direct it to [http://openrvdas/display/nbp_dashboard.html](http://openrvdas/display/nbp_dashboard.html) (again, assuming you named your openrvdas machine 'openrvdas'). You should see a set of dials, line charts and tables. If the system is in "monitor" mode, they should be updating.
+12. To verify that data are getting read and parsed, open a second browser window and direct it to [http://localhost/display/nbp_dashboard.html](http://localhost/display/nbp_dashboard.html) (again, assuming you named your openrvdas machine 'openrvdas'). You should see a set of dials, line charts and tables. If the system is in "monitor" mode, they should be updating.
 
     ![NBP Widget Demo](../assets/images/nbp_dashboard.png)
  
@@ -148,11 +148,11 @@ tools that are installed and configured using the utils/install_influxdb.sh scri
 ![Grafana Dashboard Example](../assets/images/grafana_dashboard.png)
 
 ## Highcharts + native displays
-OpenRVDAS does still ship with its own Highcharts-based widgets for displaying live and historical data using Javascript-based web widgets. A set of sample web displays created with these widgets is available at [http://openrvdas/display](http://openrvdas/display); the
+OpenRVDAS does still ship with its own Highcharts-based widgets for displaying live and historical data using Javascript-based web widgets. A set of sample web displays created with these widgets is available at [http://localhost/display](http://localhost/display); the
 source files for these displays are under the project's
 [display directory](https://github.com/OceanDataTools/openrvdas/tree/master/display/html) . If you are using the
 ``NBP1406_cruise.yaml`` cruise definition, have a look at the
-[http://openrvdas/display/nbp_dashboard.html](http://openrvdas/display/nbp_dashboard.html)
+[http://localhost/display/nbp_dashboard.html](http://localhost/display/nbp_dashboard.html)
 page for an example of what the displays can do.
 
 Please see the [Displays and Widgets]({{ "/display_widgets/" | relative_url }}) page for a discussion of the construction and operation of display pages. Note that these widgets are by and large deprecated, and may cease working without notice in future updates.

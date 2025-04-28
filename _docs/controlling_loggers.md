@@ -76,8 +76,8 @@ It is worth noting that strictly speaking, a "logger" does not exist as a separa
 ```
 knud:
   configs:
-  - knud-off,
-  - knud-net,
+  - knud-off
+  - knud-net
   - knud-file/net/db
 ```
 Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406_cruise.yaml) may be useful for newcomers to the system. _(For a deeper dive, please refer to [Cruise Definition Files]({{ "/cruise_definition_files/" | relative_url }}))._

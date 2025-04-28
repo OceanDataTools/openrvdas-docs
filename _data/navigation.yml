@@ -21,13 +21,19 @@ navdocs:
         url: /quickstart/
       - title: "GUI Quick-Start"
         url: /quickstart_gui/
+
+  - title: In-depth Fundamentals
+    children:
       - title: "Installation"
         url: /install/
-
       - title: "The Listener Script"
         url: /listen_py/
       - title: "Controlling Loggers"
         url: /controlling_loggers/
+      - title: "Cruise Definition Files"
+        url: /cruise_definition_files/
+      - title: "The Cached Data Server"
+        url: /cached_data_server/
 
   - title: Data Parsing
     children:
@@ -43,14 +49,22 @@ navdocs:
       - title: "Grafana Displays"
         url: /grafana_displays/
 
-  - title: More Advanced Topics
+  - title: Cookbook
     children:
+      - title: "Simulating Live Data"
+        url: /simulating_live_data/
+      - title: "Working with Secure Websockets"
+        url: /secure_websockets/
       - title: "Adding a Sensor"
         url: /adding_a_sensor/
       - title: "Geofencing"
         url: /geofencing/
       - title: "Derived Data"
         url: /derived_data/
+      - title: "InfluxDB Shoreside Replication"
+        url: /cookbook/influxdb_shoreside_replication/
+      - title: "Grafana Feed Status Dashboard"
+        url: /cookbook/grafana_feed_status_dashboard/
 
   - title: Reference
     children:

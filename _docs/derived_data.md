@@ -56,12 +56,10 @@ The recommended way of achieving this with OpenRVDAS is with derived data logger
         data_server: localhost:8766
 ```
 
-The other widely-useful derived data transform that is available is the SubsampleTransform. One may want to plot a smoothed version of a noisy data stream, or save a compact 10-minute snapshot average. The SubsampleTransform is designed specifically for this.
+The other widely-useful derived data transform that is available is the InterpolationTransform. One may want to plot a smoothed version of a noisy data stream, or save a compact 10-minute snapshot average. The InterpolationTransform is designed specifically for this.
 
 ```
-  subsample->on:
-    name: subsample->on
-    
+  snapshot->on:   
     # Request the fields we want from cached data server
     readers:
       class: CachedDataReader
@@ -78,36 +76,36 @@ The other widely-useful derived data transform that is available is the Subsampl
             StbdTrueWindSpeed:
               seconds: 0
 
-    # For each field we're subsampling, key on name of field to subsample
-    # and specify what the subsampled output should be called, and what 
-    # algorithm to apply to subsample it.
+    # For each field we're interpolating, key is the variable we're creating,
+    # and value a dict of the source variable and how we're performing the
+    # interpolation.
     transforms:
-    - class: SubsampleTransform
+    - class: InterpolationTransform
       kwargs:
         back_seconds: 3600     # Retain this many seconds of back data
         metadata_interval: 20  # Send metadata every 20 seconds
         field_spec:
-          PortTrueWindDir:              # What field to subsample
-            output: AvgPortTrueWindDir  # What to call the subsampled output
-            subsample:
+          AvgPortTrueWindDir:              # What to call the interpolated output
+            source: PortTrueWindDir        # What field to interpolate
+            algorithm:
               type: boxcar_average      # Use 'boxcar' averaging
               window: 10                # Use a window 10 seconds wide
               interval: 10              # Output an average every 10 seconds
-          PortTrueWindSpeed:
-            output: AvgPortTrueWindSpeed
-            subsample:
+          AvgPortTrueWindSpeed:
+            source: PortTrueWindSpeed
+            algorithm:
               type: boxcar_average
               window: 10
               interval: 10
-          StbdTrueWindDir:
-            output: AvgStbdTrueWindDir
-            subsample:
+          AvgStbdTrueWindDir:
+            source: StbdTrueWindDir
+            algorithm:
               type: boxcar_average
               window: 10
               interval: 10
-          StbdTrueWindSpeed:
-            output: AvgStbdTrueWindSpeed
-            subsample:
+          AvgStbdTrueWindSpeed:
+            source: StbdTrueWindSpeed
+            algorithm:
               type: boxcar_average
               window: 10
               interval: 10
@@ -119,4 +117,4 @@ The other widely-useful derived data transform that is available is the Subsampl
         data_server: localhost:8766        
 ```
 
-The value associated with the 'subsample' key should be a dict that will be passed to [logger/utils/subsample.py](./logger/utils/subsample.py). At present, only 'boxcar_average' is defined, but the subsampling code is designed to make it easy to add other algorithms, such as Gaussian smoothing and linear and higher-order interpolations. Contributions to this code base would be very welcome.
+The value associated with the 'algorithm' key should be a dict that will be passed to the interpolate() method of InterpolationTransform. At present, only 'boxcar_average', 'nearest' and 'polar_average' are defined, but the interpolation code is designed to make it easy to add other algorithms, such as Gaussian smoothing and linear and higher-order interpolations. Contributions to this code base would be very welcome.

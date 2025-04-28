@@ -1,0 +1,31 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+/* Custom styles for collapsible navigation */
+.nav__sub-title {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Remove any automatic content addition from CSS */
+.nav__sub-title::after {
+  content: none !important;
+}
+
+/* Style for the toggle indicators */
+.nav-toggle {
+  color: #7a8288;
+  font-weight: bold;
+}
+
+/* Add transition effect for smoother experience */
+.nav__sub-title + ul {
+  transition: all 0.3s ease;
+}

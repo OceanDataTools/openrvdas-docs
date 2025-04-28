@@ -96,6 +96,10 @@ footer:
       icon: "fas fa-file-alt"
       url: "https://opensource.org/license/mit"
 
+# Add custom JS
+after_footer_scripts:
+  - /assets/js/custom.js
+
 ############################
 defaults:
   # _posts
