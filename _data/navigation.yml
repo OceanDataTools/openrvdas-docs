@@ -46,9 +46,10 @@ navdocs:
     children:
       - title: "Display Widgets"
         url: /display_widgets/
-      - title: "Grafana Displays"
+      - title: "Grafana/Influx-Based Displays"
         url: /grafana_displays/
-
+      - title: "Grafana Live"
+        url: /grafana_live/
   - title: Cookbook
     children:
       - title: "Simulating Live Data"

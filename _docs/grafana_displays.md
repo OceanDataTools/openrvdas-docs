@@ -8,11 +8,17 @@ toc_icon: "list"
 toc_sticky: true  # Makes the TOC stick on scroll
 ---
 
-InfluxDB is a widely-used open source time series database. Grafana is an open source visualization package. Used together, the two allow drag-and-drop creation of sophisticated data displays that meet and exceed the power of OpenRVDAS display tools. We strongly encourage OpenRVDAS users to focus their efforts toward creating data displays on the use of Grafana and InfluxDB. Telegraf is an additional package that can collect system variables such as disk and memory usage and feed them to InfluxDB.
+_InfluxDB_ is a widely-used open source time series database. _Grafana_ is an open source visualization package. Together, the two allow drag-and-drop creation of sophisticated data displays that exceed the power of OpenRVDAS display tools. We strongly encourage OpenRVDAS users to use Grafana and InfluxDB for their displays. Telegraf is an additional package that can collect system variables such as disk and memory usage and feed them to InfluxDB.
 
 > **Important**: The legacy `utils/install_influxdb.sh` script has been deprecated. Constant changes to InfluxDB and Grafana versions have made automated installation difficult to maintain. We now recommend that users refer directly to the latest installation instructions for each package.
 
-This document provides guidance on how to find those instructions, and how to configure OpenRVDAS to work with the installed packages.
+This document provides guidance on how to find instructions on installing and configuring InfluxDB and Grafana, and how to configure OpenRVDAS to work with them.
+
+### High Data-rate Streaming with Grafana Live
+
+Storing data in InfluxDB makes it accessible for future queries and processing, but sometimes there is a greater need for immediacy, and the time lags induced by storing and then retrieving data from InfluxDB are undesirable.
+
+Users who need to display high-rate, lag-free data should consult the _[OpenRVDAS Grafana Live]({{ "/grafana_live/" | relative_url }})_ document, which describes how to set up and use the GrafanaLiveWriter to stream high-rate data directly to Grafana displays. 
 
 ---
 
