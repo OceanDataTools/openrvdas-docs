@@ -221,7 +221,7 @@ gnss->grafana:
     - class: GrafanaLiveWriter
       kwargs:
         host: 'localhost:3000'
-        stream_id: 'openrvdas/gnss_cnav'
+        stream_id: 'openrvdas
         token_file: '/etc/openrvdas/secrets/grafana_token'
 ```
 
@@ -232,8 +232,8 @@ writers:
   - class: GrafanaLiveWriter
     kwargs:
       # Required
-      host: 'localhost:3000'                      # Grafana host:port
-      stream_id: 'openrvdas/gnss'                 # Stream identifier
+      host: 'localhost:3000'            # Grafana host:port
+      stream_id: 'openrvdas             # will have data_id/message_type appended
       token_file: '/etc/openrvdas/secrets/token' # Path to token file (recommended)
       
       # Alternative authentication (less secure)
@@ -249,13 +249,7 @@ writers:
 
 ### Stream ID Naming
 
-Stream IDs should follow this pattern: `<namespace>/<topic>`
-
-Examples:
-- `openrvdas/gnss_cnav` - GNSS navigation data
-- `openrvdas/weather` - Weather sensor data  
-- `openrvdas/engine` - Engine telemetry
-- `vessel_name/sensors` - Vessel-specific data
+By default the GrafanaLiveWriter will create a stream for every data_id and message_type encountered. For example, a VTG message from a Garmin GNSS will be written to the Grafana Live Stream `/openrvdas/gnss_cnav/vtg`.
 
 ### Testing the Writer
 
