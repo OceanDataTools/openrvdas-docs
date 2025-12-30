@@ -75,6 +75,8 @@ navdocs:
         url: /glossary/
       - title: "Security Assumptions"
         url: /security/
+      - title: "Using Type Hints"
+        url: /type_hints/
 
   - title: Links
     children:
