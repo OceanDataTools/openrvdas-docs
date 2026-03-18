@@ -37,7 +37,7 @@ Detailed instructions for each step follow below.
 
 ## InfluxDB
 
-The latest package can be retrieved at <https://www.influxdata.com/products/influxdb/>; follow the installation guide appropriate for your platform (Linux, macOS, Windows, Docker, or cloud) and verify that the InfluxDB service is running before continuing.
+The latest package can be retrieved at <https://www.influxdata.com/products/influxdb/>. As of March 2026, we have been primarily installing [InfluxDB v2.x](https://docs.influxdata.com/influxdb/v2/), though [v3.x](https://www.influxdata.com/downloads/) is now available. Follow the installation guide appropriate for your platform (Linux, macOS, Windows, Docker, or cloud) and verify that the InfluxDB service is running before continuing.
 
 ### Installation
 
