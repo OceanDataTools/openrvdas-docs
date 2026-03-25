@@ -18,12 +18,16 @@ OPENRVDAS_REPO=raw.githubusercontent.com/oceandatatools/openrvdas
 BRANCH=master
 curl -O -L https://$OPENRVDAS_REPO/$BRANCH/utils/install_openrvdas.sh
 chmod +x install_openrvdas.sh
-sudo ./install_openrvdas.sh
+./install_openrvdas.sh
 ```
 selecting ``master``, ``dev`` or other branch of the repo if your project has one.
 
-The script must be run as a user that has sudo permissions (the script will prompt several times
-for the sudo password when needed). It will ask a lot of questions and provide default answers in parens that will be filled in if you hit "return"; without any other input:
+> **Note:** Do not pipe the script directly to bash (e.g. ``curl ... | bash``) — the installer reads
+> user input from stdin, which conflicts with piping. Download the script first, then run it as shown above.
+
+The script must be run as a user that has sudo privileges. It will prompt for your sudo password once
+at startup and keep credentials alive for the duration of the install. It will ask a lot of questions
+and provide default answers in parens that will be filled in if you hit "return"; without any other input:
 
 ```
 ############################################################################
@@ -33,6 +37,9 @@ Hostname will be 'lmg-dast-s1-t'
 Install root? (/opt)
 Install root will be '/opt'
 ```
+
+If you run the script from inside an existing ``openrvdas`` clone, it will detect this and offer that
+directory as the install root, avoiding a duplicate copy being created at ``/opt/openrvdas``.
 
 Script will next ask which code repo and branch to use. Use the default
 repo and branch unless you have a project-specific branch in mind (e.g. "usap").
@@ -49,10 +56,10 @@ Repository: 'http://github.com/oceandatatools/openrvdas'
 Branch: 'master'
 ```
 
-Script will try to create the rvdas user under which the system will run. 
-It won't mind if the user already exists (note: under MacOS, script is not
-yet able to create a new user and will prompt you for a pre-existing user
-name to use):
+Script will try to create the rvdas user under which the system will run.
+It won't mind if the user already exists. On MacOS, the script cannot create
+a new system user; it defaults to the current logged-in user and will prompt
+you to confirm or change it:
 
 ```
 OpenRVDAS user to create? (rvdas)
@@ -153,7 +160,16 @@ Would you like to enable a password on the supervisord web-interface?
 Enable Supervisor Web-interface user/pass?  (no)
 ```
 
-At this point, the script will run a while and, if all has gone well, wish you "Happy logging" when it has completed.
+At this point, the script will run a while and, if all has gone well, print the install location and the
+command to activate the virtual environment, then wish you "Happy logging":
+
+```
+######################################################################
+Installation complete: /opt/openrvdas
+To activate the virtual environment, run:
+  source /opt/openrvdas/venv/bin/activate
+######################################################################
+```
 Whew.
 
 ## Post-Installation
@@ -229,10 +245,10 @@ under, or some of the Python packages they depend on may not be available.
 The OpenRVDAS virtual environment may be activated for a shell by running
 
 ```
-source venv/bin/activate
+source /opt/openrvdas/venv/bin/activate
 ```
 
-from the OpenRVDAS home directory. The primary effect of this activation is to modify the default path searched for binaries
+(The exact path is printed at the end of the installation.) The primary effect of this activation is to modify the default path searched for binaries
 so that invoking ``python`` uses the version at ``venv/bin/python`` rather than the default system path. Once activated,
 OpenRVDAS scripts may be run by invoking their location, e.g.:
 ```
