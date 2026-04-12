@@ -25,7 +25,7 @@ OpenRVDAS requires several Python packages. The cleanest way to install them wit
 cd openrvdas
 python3 -m venv venv
 source venv/bin/activate     # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r utils/requirements.txt
 ```
 
 You will need to activate this environment (`source venv/bin/activate`) each time you open a new terminal before running OpenRVDAS scripts. Your shell prompt will show `(venv)` when the environment is active.
