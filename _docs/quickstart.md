@@ -38,7 +38,7 @@ In OpenRVDAS, these functions are implemented modularly, with __reader__, __tran
  ![read, transform, writer dataflow](../assets/images/read_transform_write.png)
 
 To create and run a your first logger from the command line:
-1. Go to the top level OpenRVDAS directory:
+1. Go to the top level OpenRVDAS directory if you're not already there:
 
 ```
 cd openrvdas
