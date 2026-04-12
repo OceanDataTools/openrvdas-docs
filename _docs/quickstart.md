@@ -25,10 +25,12 @@ OpenRVDAS requires several Python packages. The cleanest way to install them wit
 cd openrvdas
 python3 -m venv venv
 source venv/bin/activate     # On Windows: venv\Scripts\activate
-pip install -r utils/requirements.txt
+pip install pyyaml pyserial websockets parse
 ```
 
 You will need to activate this environment (`source venv/bin/activate`) each time you open a new terminal before running OpenRVDAS scripts. Your shell prompt will show `(venv)` when the environment is active.
+
+> **Note:** The full installation would perform `pip install -r utils/requirements.txt`, including packages (such as `uwsgi`) that are only needed for the web console. The packages installed above are sufficient for everything in this quickstart. When you perform a full installation via the installer script, it handles all dependencies for you automatically.
 
 ### Your first logger
 The heart of OpenRVDAS is the __logger__. Loggers read data from some source (typically a sensor), optionally transform it in some or another way (timestamp, parse, perform QC), and then write it somewhere (file, database, network socket).
