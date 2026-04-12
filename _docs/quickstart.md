@@ -18,6 +18,18 @@ git clone https://github.com/OceanDataTools/openrvdas.git
 
 You can also download a ZIP file of the code from your browser by [selecting this link](https://github.com/OceanDataTools/openrvdas/archive/refs/heads/master.zip).
 
+### Set up a Python environment
+OpenRVDAS requires several Python packages. The cleanest way to install them without affecting your system Python is in a virtual environment:
+
+```
+cd openrvdas
+python3 -m venv venv
+source venv/bin/activate     # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+You will need to activate this environment (`source venv/bin/activate`) each time you open a new terminal before running OpenRVDAS scripts. Your shell prompt will show `(venv)` when the environment is active.
+
 ### Your first logger
 The heart of OpenRVDAS is the __logger__. Loggers read data from some source (typically a sensor), optionally transform it in some or another way (timestamp, parse, perform QC), and then write it somewhere (file, database, network socket).
 
@@ -26,7 +38,7 @@ In OpenRVDAS, these functions are implemented modularly, with __reader__, __tran
  ![read, transform, writer dataflow](../assets/images/read_transform_write.png)
 
 To create and run a your first logger from the command line:
-1. Go to the top level OpenRVDAS directory:
+1. Go to the top level OpenRVDAS directory if you're not already there:
 
 ```
 cd openrvdas
