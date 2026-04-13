@@ -73,6 +73,10 @@ navdocs:
     children:
       - title: "Glossary"
         url: /glossary/
+      - title: "Reading from Serial Ports"
+        url: /serial_readers/
+      - title: "Reading from Modbus Devices"
+        url: /modbus_readers/
       - title: "Security Assumptions"
         url: /security/
       - title: "Using Type Hints"
