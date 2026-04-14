@@ -212,8 +212,8 @@ This form of logger definition can be mixed and matched with the traditional for
 
 ### Variables
 
-OpenRVDAS now supports a simple use of variables in a cruise definition file. If defined as a dict under a top-level `variables` key, the loading script will look for instances of the variables enclosed in `<<double_angle_brackets>>` and perform text substitutions.
-```
+OpenRVDAS supports variables in a cruise definition file. If defined as a dict under a top-level `variables` key, the loading script will look for instances of the variables enclosed in `<<double_angle_brackets>>` and perform text substitutions.
+```yaml
 ###########################################################
 # Global variables - can be overridden by individual loggers
 variables:
@@ -221,7 +221,7 @@ variables:
   raw_udp_port: 6224
   file_root: /var/tmp/log
   parse_definition_path: test/NBP1406/devices/nbp_devices.yaml
- 
+
 ###########################################################
 # Optional cruise metadata
 cruise:
@@ -229,6 +229,40 @@ cruise:
   start: "2014-06-01"  # Quoted so YAML doesn't auto-convert to a datetime
   end: "2014-07-01"
 ```
+
+#### Variable Default Values
+
+Variable placeholders may include a default value using a `|` separator. If the named variable is not defined, the default is used instead:
+
+```
+<<var_name|default_value>>
+```
+
+For example, a template that falls back to a standard baud rate when none is provided by the logger:
+
+```yaml
+baudrate: <<baud_rate|9600>>
+```
+
+Default values may themselves be variable references, enabling chains of fallbacks:
+
+```yaml
+# Use baud_rate if defined, otherwise fall back to default_baud, otherwise use 9600
+baudrate: <<baud_rate|<<default_baud|9600>>>>
+```
+
+The full set of supported substitution forms is:
+
+| Syntax | Behavior |
+|---|---|
+| `<<var>>` | Replace with the value of `var` |
+| `<<var\|default>>` | Replace with `var` if defined; otherwise use the literal string `default` |
+| `<<var\|<<fallback>>>>` | Replace with `var` if defined; otherwise use the value of `fallback` |
+| `<<var\|<<fallback\|default>>>>` | Replace with `var`, then `fallback`, then the literal `default` |
+
+**Type conversion**: literal default values are automatically converted to the appropriate Python type. For example, `<<timeout|10>>` produces the integer `10` (not the string `"10"`) when `timeout` is undefined. The values `true`/`false` become Python booleans, `null` becomes `None`, and numeric strings become `int` or `float` as appropriate.
+
+**Pass-through**: if a variable is undefined and has no default, the placeholder is passed through unchanged (e.g. `<<unknown_var>>` remains `<<unknown_var>>` in the output). This is useful for multi-level templates where outer templates leave some variables to be resolved by an inner context.
 
 ### Logger Templates
 
