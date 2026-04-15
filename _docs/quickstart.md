@@ -26,6 +26,7 @@ cd openrvdas
 python3 -m venv venv
 source venv/bin/activate     # On Windows: venv\Scripts\activate
 pip install pyyaml pyserial websockets parse
+pip install -e .  # you can ignore any 'No pyproject.toml found' message
 ```
 
 You will need to activate this environment (`source venv/bin/activate`) each time you open a new terminal before running OpenRVDAS scripts. Your shell prompt will show `(venv)` when the environment is active.
