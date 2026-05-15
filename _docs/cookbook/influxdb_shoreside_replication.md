@@ -185,6 +185,7 @@ Create the replication layer, the local-bucket-id is for the 'non-restricted' bu
     
 ```
 influx replication create --name Ship_to_Shore \
+--drop-non-retryable-data \
 --remote-id 0e739b8befc31000 \
 --local-bucket-id 40bd5db8108cc867  --org-id 484128927fd28af7 \
 --remote-bucket openrvdas
