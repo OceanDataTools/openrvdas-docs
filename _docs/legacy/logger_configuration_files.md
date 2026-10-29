@@ -21,7 +21,7 @@ things) a configuration file describing what Readers, Transforms and
 Writers should be run together and with what parameters.
 
 ```
-logger/listener/listen.py --config_file gyr_logger.yaml
+listen --config_file gyr_logger.yaml
 ```
 This document describes the format and rationale behind those
 configuration files. If YAML is new to you, the
@@ -177,7 +177,7 @@ A typical vessel installation will necessitate running multiple loggers at once,
 OpenRVDAS includes a command-line tool for validating configuration files before running them. It checks YAML syntax, required fields, and reader/transform/writer class names, providing clear error messages rather than Python stack traces.
 
 ```
-python logger/utils/validate_config.py my_logger_config.yaml
+validate_config my_logger_config.yaml
 ```
 
 The validator auto-detects the file type (device definitions, logger configs, cruise definitions, and templates) and runs the appropriate checks. See the [Validating Configuration Files]({{ "/cruise_definition_files/#validating-configuration-files" | relative_url }}) section in the Cruise Definition Files document for full details.

@@ -373,12 +373,12 @@ OpenRVDAS includes a validation utility that checks configuration files for comm
 
 Validate a single file:
 ```
-python logger/utils/validate_config.py path/to/config.yaml
+validate_config path/to/config.yaml
 ```
 
 Validate multiple files with verbose output:
 ```
-python logger/utils/validate_config.py -v contrib/devices/*.yaml
+validate_config -v contrib/devices/*.yaml
 ```
 
 In normal mode, the validator only prints output for files with errors or warnings. With the `-v` flag, it also prints the detected file type and an "OK" message for files that pass validation.

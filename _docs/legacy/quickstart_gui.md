@@ -41,7 +41,7 @@ ports have names/locations like `/tmp/tty_s330` (where we will, for example, fin
 
     Try running a simple logger from the command line that reads from one of the simulated serial ports. E.g:
     ```
-    logger/listener/listen.py --serial port=/tmp/tty_s330
+    listen --serial port=/tmp/tty_s330
     ```
    Do you see data? Hurrah!
 
@@ -115,9 +115,9 @@ Rather than talking to the logger manager directly, we use the Django-based GUI 
 
 Please see [Controlling Loggers](../controlling_loggers/) for information on running logger\_runner.py and logger\_manager.py.
 
-A command-line interface, `servers/lmcmd.py`, allows another way of connecting to the Django database to issue commands and get status updates.
+A command-line interface, `lmcmd` (`server/lmcmd.py`), allows another way of connecting to the Django database to issue commands and get status updates.
 ```
-/opt/openrvdas$ server/lmcmd.py
+/opt/openrvdas$ lmcmd
 command? help
 Valid commands:
   load_configuration <configuration file name>
@@ -158,3 +158,47 @@ page for an example of what the displays can do.
 Please see the [Displays and Widgets]({{ "/display_widgets/" | relative_url }}) page for a discussion of the construction and operation of display pages. Note that these widgets are by and large deprecated, and may cease working without notice in future updates.
 
 ![Django GUI Static Widget Example](../assets/images/django_gui_static_widget.png)
+
+# Next Steps
+
+Once the sample cruise is running, here are some directions to go next.
+
+**Write a cruise definition for your own ship.** The sample `NBP1406_cruise.yaml` is a good model.
+* [Cruise Definition Files]({{ "/cruise_definition_files/" | relative_url }}) describes the loggers,
+  configs and modes that make up a cruise definition, and the logger templates and variables that
+  keep it short. If YAML is new to you, start with
+  [A Short Introduction to YAML]({{ "/yaml/" | relative_url }}).
+* [Your Institution's Code and Configuration]({{ "/local_code/" | relative_url }}) describes where to
+  keep your cruise definitions, device definitions and calibration files: in a repository of your
+  own, linked into OpenRVDAS's `local/` directory.
+* Check a definition with `validate_config` before loading it, e.g.
+  `validate_config local/uuw/mvp/MVP2610_cruise.yaml`.
+
+**Add your instruments.**
+* [Adding a Sensor]({{ "/adding_a_sensor/" | relative_url }}) walks through adding a new logger to a
+  cruise definition.
+* [Reading from Serial Ports]({{ "/serial_readers/" | relative_url }}) and
+  [Reading from Modbus Devices]({{ "/modbus_readers/" | relative_url }}) cover getting data in.
+* [Record Parsing]({{ "/parsing/" | relative_url }}) and the
+  [NMEA Device Type Library]({{ "/nmea_device_types/" | relative_url }}) cover turning raw records
+  into named fields.
+
+**Compute derived values.**
+* [Computed Fields]({{ "/computed_fields/" | relative_url }}): unit conversions, corrections and
+  true winds, from equations in the cruise definition.
+* [Calibrated Values for Sensor Data]({{ "/cookbook/calibrated_values/" | relative_url }}): applying
+  calibration coefficients kept in dated, version-controlled files.
+* [Averaging and Resampling]({{ "/interpolation_transform/" | relative_url }}): one-minute averages,
+  QC statistics and the like.
+
+**Display your data** with [Grafana and InfluxDB]({{ "/grafana_displays/" | relative_url }}).
+
+**Run it for real.**
+* [Controlling Loggers]({{ "/controlling_loggers/" | relative_url }}) describes the logger manager and
+  how it is run.
+* [Web Consoles]({{ "/web_uis/" | relative_url }}) covers the Django and React consoles, and switching
+  between them.
+* [Recording What Ran]({{ "/cruise_records/" | relative_url }}) describes the snapshots and journal that
+  record how your data was collected, and archiving them at the end of a cruise.
+* [Simulating Live Data]({{ "/simulating_live_data/" | relative_url }}) lets you test new configurations
+  against recorded data before trying them on live instruments.

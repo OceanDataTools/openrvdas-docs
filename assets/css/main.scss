@@ -25,6 +25,17 @@
   font-weight: bold;
 }
 
+/* The section heading is a link to the section's landing page, but
+   should look like the rest of the title, not like a link. */
+.nav__sub-title a.nav-section-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav__sub-title a.nav-section-link:hover {
+  text-decoration: underline;
+}
+
 /* Add transition effect for smoother experience */
 .nav__sub-title + ul {
   transition: all 0.3s ease;

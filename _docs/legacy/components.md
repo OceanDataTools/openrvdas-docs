@@ -163,7 +163,7 @@ listener.run()
 or execute
 
 ```
-logger/listener/listen.py --config_file gyr1_config.yaml
+listen --config_file gyr1_config.yaml
 ```
 from the command line to read the file and assemble the components as specified. Please see [OpenRVDAS Configuration Files]({{ "/logger_configuration_files/" | relative_url }}) for more information on the syntax and use of configuration files.
 

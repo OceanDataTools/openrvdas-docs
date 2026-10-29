@@ -87,13 +87,13 @@ Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cru
 * It spawns a command line console interface to a database/backing store where it will store/retrieve information on which logger configurations should be running and which are. By default, this database will be an in-memory, transient store, unless overridden with the ``--database`` flag to select ``django`` or ``sqlite``). When run as a service, the console may be disabled by using the ``--no-console`` flag:
 
   ```
-  server/logger_manager.py --database django --no-console
+  logger_manager --database django --no-console
   ```
 
 * If a cruise definition and optional mode are specified on the  command line via the ``--config`` and ``--mode`` flags, it will load the definition into the database and set the current mode as directed:
 
   ```
-  server/logger_manager.py \
+  logger_manager \
         --config test/NBP1406/NBP1406_cruise.yaml \
         --mode monitor
   ```
@@ -106,12 +106,30 @@ Perusing a complete cruise configuration file such as [test/NBP1406/NBP1406\_cru
 
 By default, when the logger manager runs a logger, it will redirect
 stderr for that process to a file, by default at
-``/var/tmp/openrvdas/{logger}.stderr``. This can be overridden by
+``/var/log/openrvdas/loggers/{logger}.stderr``. This can be overridden by
 specifying the ``--stderr_file_pattern`` flag when invoking
 ``logger_manager.py``. The argument should have the string
 ``{logger}`` in it somewhere; this will be replaced by the name of the
-relevant logger, e.g. ``/var/tmp/openrvdas/gyr1.stderr``, when each
+relevant logger, e.g. ``/var/log/openrvdas/loggers/gyr1.stderr``, when each
 process is started up.
+
+Note the two levels here: the servers themselves (the logger manager and
+cached data server) write their output directly to ``/var/log/openrvdas/``,
+while the individual loggers they run write to the ``loggers/``
+subdirectory beneath it.
+
+Each logger's stderr file is rotated when it reaches 1 MB, and up to 100
+older files are kept alongside it as ``{logger}.stderr.1``,
+``{logger}.stderr.2`` and so on. This matters when a logger has been
+failing and restarting in a loop: the first, most informative error may
+have already rotated out of the current file.
+
+_Note: this location is new in v2.7.0. Earlier versions wrote each logger's
+stderr directly to ``/var/log/openrvdas/{logger}.stderr``. After an upgrade,
+loggers write to the new ``loggers/`` subdirectory straight away (the logger
+manager creates it if necessary), but files written before the upgrade stay
+at the top level. If you're looking for a logger's output from before the
+upgrade, look there._
 
 # Running and Controlling the LoggerManager
 ## Running from the command line
@@ -119,7 +137,7 @@ process is started up.
 As indicated above, the logger\_manager.py script can be run with no arguments and will default to using an in-memory data store:
 
 ```
-server/logger_manager.py
+logger_manager
 ```
 You can type "help" for a full list of commands, but a sample of the available functionality is
 
@@ -152,7 +170,7 @@ command?
 **Note**: the NBP1406 sample cruise directs UDP output to port 6224, so you can monitor the logger manager's network output by running the following listener command in a separate window to read from port 6224 and write to standard output:
 
 ```
-    logger/listener/listen.py --udp 6224 --write_file -
+    listen --udp 6224 --write_file -
 ```
 
 **Manually change logger configurations**
@@ -166,7 +184,7 @@ command? quit
 As with sample script for logger\_runner.py, the sample cruise configuration file [test/NBP1406/NBP1406\_cruise.yaml](https://github.com/OceanDataTools/openrvdas/blob/master/test/NBP1406/NBP1406\_cruise.yaml) attempts to read from virtual serial ports, so you'll need to create those simulated serial ports by having the command
 
 ```
-  logger/utils/simulate_data.py \
+  simulate_data \
     --config test/NBP1406/simulate_NBP1406.yaml
 ```
 
@@ -183,7 +201,7 @@ document]({{ "/display_widgets/" | relative_url }}).
 A CachedDataServer may be run as a standalone process, but it may also be invoked by the LoggerManager when handed a ``--start_data_server`` flag:
 
 ```
-  server/logger_manager.py \
+  logger_manager \
     --database django \
     --config test/NBP1406/NBP1406_cruise.yaml \
     --data_server_websocket 8766 \

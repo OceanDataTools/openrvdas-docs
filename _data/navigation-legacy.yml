@@ -1,0 +1,124 @@
+main:
+  - title: "About"
+    url: /about/
+  - title: "Quickstart"
+    url: /quickstart/
+  - title: "GUI Quickstart"
+    url: /quickstart_gui/
+  - title: "All the Docs"
+    url: /docs/
+  - title: "API Reference"
+    url: /api_reference/
+  #- title: "Posts"
+  #  url: /posts/
+  #- title: "Categories"
+  #  url: /categories/
+  #- title: "Tags"
+  #  url: /tags/
+
+navdocs:
+  - title: Getting Started
+    children:
+      - title: "Quick-Start Guide"
+        url: /quickstart/
+      - title: "GUI Quick-Start"
+        url: /quickstart_gui/
+
+  - title: In-depth Fundamentals
+    children:
+      - title: "Installation"
+        url: /install/
+      - title: "Web Consoles: Django and React"
+        url: /web_uis/
+      - title: "The Listener Script"
+        url: /listen_py/
+      - title: "Controlling Loggers"
+        url: /controlling_loggers/
+      - title: "A Short Introduction to YAML"
+        url: /yaml/
+      - title: "Cruise Definition Files"
+        url: /cruise_definition_files/
+      - title: "Your Institution's Code and Configuration"
+        url: /local_code/
+      - title: "The Cached Data Server"
+        url: /cached_data_server/
+      - title: "Recording What Ran: Snapshots and Journal"
+        url: /cruise_records/
+
+  - title: Data Parsing
+    children:
+      - title: "Record Parsing"
+        url: /parsing/
+      - title: "NMEA Device Type Library"
+        url: /nmea_device_types/
+
+  - title: Computing Derived Values
+    children:
+      - title: "Computed Fields"
+        url: /computed_fields/
+      - title: "Averaging and Resampling"
+        url: /interpolation_transform/
+
+  - title: Reference
+    children:
+      - title: "Component API Reference"
+        url: /api_reference/
+
+  - title: Graphs and Displays
+    children:
+      - title: "Display Widgets"
+        url: /display_widgets/
+      - title: "Grafana/Influx-Based Displays"
+        url: /grafana_displays/
+      - title: "Grafana Live"
+        url: /grafana_live/
+  - title: Cookbook
+    children:
+      - title: "Simulating Live Data"
+        url: /simulating_live_data/
+      - title: "Working with Secure Websockets"
+        url: /secure_websockets/
+      - title: "Adding a Sensor"
+        url: /adding_a_sensor/
+      - title: "Geofencing"
+        url: /geofencing/
+      - title: "Derived Data"
+        url: /derived_data/
+      - title: "Calibrated Values"
+        url: /cookbook/calibrated_values/
+      - title: "InfluxDB Shoreside Replication"
+        url: /cookbook/influxdb_shoreside_replication/
+      - title: "Grafana Feed Status Dashboard"
+        url: /cookbook/grafana_feed_status_dashboard/
+
+  - title: Reference
+    children:
+      - title: "Glossary"
+        url: /glossary/
+      - title: "Reading from Serial Ports"
+        url: /serial_readers/
+      - title: "Reading from Modbus Devices"
+        url: /modbus_readers/
+      - title: "Security Assumptions"
+        url: /security/
+      - title: "Using Type Hints"
+        url: /type_hints/
+
+  - title: Links
+    children:
+      - title: "Ocean Data Tools Home"
+        icon: "fas fa-fw fa-link"
+        url: "https://oceandata.tools"
+      - title: "GitHub Repository"
+        icon: "fab fa-fw fa-github"
+        url: "https://github.com/OceanDataTools/openrvdas"
+  - title: Extras
+    children:
+      - title: "RVTEC 2019 Introduction PDF"
+        icon: "fas fa-fw fa-link"
+        url: /assets/files/rvtec-2019-openrvdas-intro.pdf
+        external: true
+      - title: "RVTEC 2024 Ocean Data Tools Session"
+        icon: "fas fa-fw fa-link"
+        url: "https://www.youtube.com/watch?v=lRGulusX4sQ"
+        external: true

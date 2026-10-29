@@ -69,7 +69,7 @@ Please see the code in [logger/listener/listener.py](https://github.com/OceanDat
 The [logger/listener/listen.py](https://github.com/OceanDataTools/openrvdas/blob/master/logger/listener/listen.py) script is a convenient wrapper around the Listener class, and allows combining and running the most commonly-used Reader, Transform and Writer components from the command line. For example, the invocation:
 
 ```
-listen.py \
+listen \
   --serial port=/dev/ttyr15,baudrate=9600 \
   --transform_timestamp \
   --transform_prefix gyr1 \
@@ -89,7 +89,7 @@ For logger workflows of non-trivial complexity, we recommend that users forgo sp
 A configuration file is a YAML or JSON (a subset of YAML) specification of components along with their parameters. It may be invoked using the `--config_file` argument:
 
 ```
-logger/listener/listen.py --config_file gyr_logger.yaml
+listen --config_file gyr_logger.yaml
 ```
 
 The file gyr_logger.yaml might consist of the YAML/JSON definition
@@ -118,7 +118,7 @@ The listen.py script may also read a specific logger config from a cruise defini
 
 ```
 # Run the gyr1->net config from cruise definition NBP1406_cruise.yaml
-logger/listener/listen.py --config_file test/NBP1406/NBP1406_cruise.yaml:"gyr1->net"
+listen --config_file test/NBP1406/NBP1406_cruise.yaml:"gyr1->net"
 ```
 
 This functionality is especially handy when trying to debug new logger configurations.

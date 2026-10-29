@@ -7,10 +7,10 @@ toc_label: "Contents"
 toc_icon: "list"
 toc_sticky: true  # Makes the TOC stick on scroll
 ---
-The [listen.py](https://github.com/OceanDataTools/openrvdas/blob/master/logger/listener/listen.py) script incorporates the most common Readers, Transforms and Writers, providing much of the functionality that one might want in a logger straight from the command line. For example, the invocation:
+The [listen.py](https://github.com/OceanDataTools/openrvdas/blob/master/logger/listener/listen.py) script incorporates the most common Readers, Transforms and Writers, providing much of the functionality that one might want in a logger straight from the command line. It is installed as the command `listen` (with the OpenRVDAS virtual environment active, run it from the OpenRVDAS directory, so that relative paths resolve). For example, the invocation:
 
 ```
-logger/listener/listen.py \
+listen \
   --serial port=/dev/ttyr15,baudrate=9600 \
   --transform_timestamp \
   --transform_prefix gyr1 \
@@ -32,7 +32,7 @@ When readers, transforms and writers are specified on the command line, much of 
 The command
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/dev/ttyr15,baudrate=9600 \
     --transform_timestamp \
     --transform_prefix gyr1 \
@@ -45,7 +45,7 @@ will first add a timestamp to records and then prefix 'gyr1' to them, producing:
 while the command line
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/dev/ttyr15,baudrate=9600 \
     --transform_prefix gyr1 \
     --transform_timestamp \
@@ -58,14 +58,14 @@ will prefix first, then add a timestamp:
 Transforms can be applied in any order, and may be repeated as desired, but it is important to remember that because of the sequential processing of the command line, any flags on which a transform (or reader or writer) depends must appear before the transform on the command line. That is:
 
 ```
-logger/listener/listen.py --udp 6224 \
+listen --udp 6224 \
     --slice_separator ' ' \
     --transform_slice 0:3
 ```
 will slice its records using a space as the field separator, while
 
 ```
-logger/listener/listen.py --udp 6224 \
+listen --udp 6224 \
     --transform_slice 0:3 \
     --slice_separator ' '  # ignored by the preceding transform
 ```
@@ -76,28 +76,28 @@ will use the default separator (a comma), because the `--slice_separator` argume
 For all its limitations, the listen.py script has a lot of tricks up its sleeve. Here's a simple invocation to read from a serial port and write to a "normal" file:
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/dev/ttyr15 \
     --write_file my_file
 ```
 If your machine doesn't have any serial ports sending actual data, you can create virtual serial ports, as described in [Simulating Live Data]({{ "/simulating_live_data/" | relative_url }}), by running
 
 ```
-logger/utils/simulate_data.py \
+simulate_data \
     --port /tmp/tty_gyr1 \
     --filebase test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01
 ```
 in a separate terminal, in which case your listener command line would be
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/tmp/tty_gyr1 \
     --write_file my_file
 ```
 To see what is going on, specify '-' as the file argument, which tells the TextFileWriter to write to stdout:
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/tmp/tty_gyr1 \
     --write_file -
 ```
@@ -114,7 +114,7 @@ If you want to see more of what's going on, you can re-run the above commands wi
 Let's go ahead and attach a timestamp to the data we receive, prefix it by the instrument name, and send it to the network, say port 6224, in addition to stdout:
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/tmp/tty_gyr1 \
     --transform_timestamp \
     --transform_prefix gyr1 \
@@ -135,14 +135,14 @@ gyr1 2019-06-25T20:52:28.518668Z $HEHDT,218.29,T*1f
 You can also read directly from one or more network ports:
 
 ```
-logger/listener/listen.py \
+listen \
     --udp 6224,6225 \
     --write_file -
 ```
 and filter the results to only receive records of interest:
 
 ```
-logger/listener/listen.py \
+listen \
     --udp 6224,6225 \
     --transform_regex_filter "^gyr1 " \
     --write_file -
@@ -156,7 +156,7 @@ gyr1 2019-06-25T20:52:28.721599Z $HEHDT,218.24,T*12
 we can strip off the instrument name before storing it:
 
 ```
-logger/listener/listen.py \
+listen \
     --udp 6224,6225 \
     --transform_regex_filter "^gyr1 " \
     --transform_slice 1: \
@@ -167,7 +167,7 @@ which uses Python-style list indexing to select elements in a line of space-deli
 Logfile records are special in that they are prefixed with timestamps. If, for testing or display purposes, we want our LogfileReader to deliver the records in intervals that correspond to the intervals between their timestamps, we can specify so with a flag:
 
 ```
-logger/listener/listen.py \
+listen \
     --logfile_use_timestamps \
     --logfile test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01 \
     --write_file -
@@ -175,7 +175,7 @@ logger/listener/listen.py \
 To read logfiles in parallel, we can either specify a comma-separated list of logfiles:
 
 ```
-logger/listener/listen.py \
+listen \
     --logfile_use_timestamps \
     --logfile test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01,test/NBP1406/knud/raw/NBP1406_knud-2014-08-01 \
     --write_file -
@@ -183,7 +183,7 @@ logger/listener/listen.py \
 or specify them with two separate `--logfile` flags:
 
 ```
-logger/listener/listen.py \
+listen \
     --logfile_use_timestamps \
     --logfile test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01 \
     --logfile test/NBP1406/knud/raw/NBP1406_knud-2014-08-01 \
@@ -196,7 +196,7 @@ A FileReader takes a wildcarded filename and open the matching files in alphanum
 So the invocation
 
 ```
-logger/listener/listen.py \
+listen \
     --tail --refresh_file_spec \
     --file test/NBP1406/\*/raw/NBP1406_\* \
     --write_file -
@@ -215,7 +215,7 @@ Records within a logfile are also expected to be prefixed by a timestamp, the de
 When creating a LogfileReader, we give it a filebase (e.g. `NBP1700/gyr1/raw/NBP_gyr1`) and it knows to append a wildcard to the name and read through all files on the specified path bearing that name and a date suffix. For example,
 
 ```
-logger/listener/listen.py \
+listen \
     --logfile_use_timestamps \
     --logfile test/NBP1406/gyr1/raw/NBP1406_gyr1 \
     --write_file -
@@ -225,7 +225,7 @@ Will match all files that have `NBP1406/gyr1/raw/NBP1406_gyr1` as their prefix a
 So, given these pieces, let's try reading data from a logfile, stripping off the timestamps and creating new timestamps that are more spread out, simulating a faster delivery of data.
 
 ```
-logger/listener/listen.py \
+listen \
     --logfile test/NBP1406/gyr1/raw/NBP1406_gyr1 \
     --transform_slice 1: \
     --transform_timestamp \
@@ -245,12 +245,12 @@ One way around this problem is **listener chaining**.
 Chaining is just the process of running multiple instances of the script in parallel, for example:
 
 ```
-logger/listener/listen.py \
+listen \
     --serial port=/dev/ttyr15,baudrate=9600 \
     --transform_timestamp \
     --write_logfile /log/current/gyr1 &
 
-logger/listener/listen.py \
+listen \
     --logfile /log/current/gyr1 \
     --transform_prefix gyr1 \
     --write_udp 6224
@@ -264,7 +264,7 @@ For logger workflows of non-trivial complexity, we recommend that users forgo sp
 A configuration file is a YAML or JSON specification of components along with their parameters. It may be invoked using the `--config_file` argument:
 
 ```
-logger/listener/listen.py --config_file gyr_logger.yaml
+listen --config_file gyr_logger.yaml
 ```
 where gyr_logger.yaml consists of the YAML definition
 
@@ -308,7 +308,7 @@ One major advantage of using configuration files is the ability to use ComposedR
 You may also load a single configuration from a complete cruise definition file by separating the file name from the configuration name with a colon:
 
 ```
-  listen.py --config_file test/NBP1406/NBP1406_cruise.yaml:'gyr1->net' -v
+  listen --config_file test/NBP1406/NBP1406_cruise.yaml:'gyr1->net' -v
 ```
 This functionality has proven useful for debugging a logger that is dying mysteriously.
 

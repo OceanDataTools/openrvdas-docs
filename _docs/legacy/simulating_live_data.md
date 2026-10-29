@@ -20,7 +20,7 @@ sets up multiple feeds at once.
 To invoke a single data feed:
 
 ```
-   simulate_data.py --udp 6224 \
+   simulate_data --udp 6224 \
      --filebase test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01
 ```
 
@@ -46,7 +46,7 @@ as the delimiter between timestamp and record:
 ```
 you may specify
 ```
-   simulate_data.py --udp 6224 \
+   simulate_data --udp 6224 \
      --filebase test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01 \
      --record_format '{timestamp:ti},{record}'
 ```
@@ -59,14 +59,14 @@ Instead of `--udp`, you may also specify `--serial` (and optionally
 `--baudrate`) to simulate a serial port:
 
 ```
-   simulate_data.py --serial /tmp/ttyr05 \
+   simulate_data --serial /tmp/ttyr05 \
      --filebase test/NBP1406/gyr1/raw/NBP1406_gyr1-2014-08-01
 ```
 
 If `--config` is specified
 
 ```
-   simulate_data.py --config test/NBP1406/simulate_NBP1406.yaml
+   simulate_data --config test/NBP1406/simulate_NBP1406.yaml
 ```
 
 the script will expect a YAML file keyed by instrument names, where

@@ -31,7 +31,7 @@ pip install -e . --no-deps    # install openrvdas itself, not its full dependenc
 
 You will need to activate this environment (`source venv/bin/activate`) each time you open a new terminal before running OpenRVDAS scripts. Your shell prompt will show `(venv)` when the environment is active.
 
-> **Note:** The `-e` install step also registers `listen`, `logger_manager` and other scripts as shell commands, though the examples below still use the full path `logger/listener/listen.py` to show where each script lives. Both `listen` and the full path need the virtual environment active.
+> **Note:** The `-e` install step also registers `listen`, `logger_manager` and OpenRVDAS's other scripts as shell commands, which the examples below use: `listen` runs `logger/listener/listen.py`. The commands need the virtual environment active, and should be run from the OpenRVDAS directory, because relative paths such as `test/...` are resolved against the current directory.
 
 > **Note:** The above commands install only what the examples below need. If you want to use components beyond these examples — the InfluxDB writer, the Modbus reader, or the Django web console — see the [installation page]({{ "/install/" | relative_url }}), or run `pip install -e .` without `--no-deps` to pull in the full set of core dependencies. Note that these include `uwsgi`, which needs a C compiler and OpenSSL headers, and `geopandas`, which needs GDAL — either can fail to build on a Raspberry Pi or any machine without development tools. Some optional features are installed separately as extras, e.g. `pip install -e '.[geofence]'` for `GeofenceTransform`. When you perform a full installation via the installer script, it handles all dependencies for you automatically.
 
@@ -77,7 +77,7 @@ The lines define a logger in YAML format, specifying that we are to read lines o
 3. Let's run the logger:
 
 ```
-> logger/listener/listen.py --config_file read_license.yaml
+> listen --config_file read_license.yaml
 license: 2024-05-07T02:35:06.723269Z MIT License
 license: 2024-05-07T02:35:07.133440Z Copyright (c) 2017 David Pablo Cohn
 license: 2024-05-07T02:35:07.542036Z Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -135,13 +135,13 @@ This logger reads records from UDP port 6221, strips out the first two whitespac
 5. Run this second logger in your second terminal window:
 
 ```
-> logger/listener/listen.py --config_file read_udp.yaml
+> listen --config_file read_udp.yaml
 ```
 
 6. Initially, nothing should happen, until you actually write something to port 6221 for it to read, by re-running the now-modified first logger in your first terminal window:
 
 ```
-> logger/listener/listen.py --config_file read_license.yaml
+> listen --config_file read_license.yaml
 ```
 At this point you should see the annotated license file data scrolling through the first window, and the second window should begin displaying those same lines with the prefix and timestamp stripped off.
 
@@ -151,7 +151,7 @@ Congratulations - you've now created and run a couple of OpenRVDAS loggers!
 The `listen.py` script is a sort of jack-of-all-trades for OpenRVDAS. In addition to loading and running logger configurations from file, it can invoke and run many of the most frequently used modules from the command line. For example, our second logger could have been defined and run from the command line as
 
 ```
-logger/listener/listen.py \
+listen \
     --file LICENSE \
     --transform_timestamp \
     --transform_prefix "license:" \
@@ -161,7 +161,7 @@ logger/listener/listen.py \
 and our UDP-reading logger as
 
 ```
-logger/listener/listen.py \
+listen \
     --udp 6221 \
     --transform_slice "2:" \
     --write_file -
@@ -215,7 +215,7 @@ into structured data fields like these:
 The basic specification of the `ParseTransform` requires only telling it where to look for the appropriate device definition files. This can be done with both the command line interface:
 
 ```
-logger/listener/listen.py \
+listen \
     --udp 6224 \
     --parse_definition_path "local/devices/*.yaml,/opt/openrvdas/local/devices/*.yaml" \
     --transform_parse \
@@ -264,7 +264,7 @@ A transform is any Python class that supports a `transform(record)` method that 
 #### Writers
 A writer is any Python class that supports...you guessed it, a `write(record)` method that takes a record or list of records and does something with it. No return value is expected or checked.
 
-In each case, it is good form to link your modules into the repository under the `local/` subdirectory following the guidance in `local/README.md`.
+In each case, it is good form to keep your modules in your institution's own repository and link it into OpenRVDAS's `local/` subdirectory, as described in [Your Institution's Code and Configuration]({{ "/local_code/" | relative_url }}).
 
 ### Record types
 Note that while most modules do at least some type checking on their inputs, there is no explicit type-checking of records between modules. It is expected that the configuration designer verify that the output format of each module is compatible with the input format of the modules it feeds into.

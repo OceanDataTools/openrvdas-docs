@@ -21,7 +21,7 @@ In the default OpenRVDAS installation a CachedDataServer is already running and 
 The default installation uses `supervisord` to start and maintain the server:
 
 ```
-server/cached_data_server.py --port 8766 \
+cached_data_server --port 8766 \
     --disk_cache /var/tmp/openrvdas/disk_cache \
     --max_records 86400 -v
 ```
@@ -53,7 +53,7 @@ You can also run the server directly. If you are running a LoggerManager, pass `
 A typical standalone invocation:
 
 ```
-server/cached_data_server.py \
+cached_data_server \
   --port 8766 \
   --disk_cache /var/tmp/openrvdas/disk_cache \
   --back_seconds 3600 \
@@ -286,19 +286,19 @@ HTTP GET requests run inside the same asyncio event loop as all WebSocket connec
 [`logger/listener/listen.py`](https://github.com/OceanDataTools/openrvdas/blob/master/logger/listener/listen.py) accepts a `--cached_data` argument that subscribes to one or more fields and prints received records to stdout. Useful for quick inspection and for piping CDS data into other command-line tools.
 
 ```
-logger/listener/listen.py --cached_data field_1,field_2,field_3
+listen --cached_data field_1,field_2,field_3
 ```
 
 Connects to `localhost:8766` by default. To target a different host or port, append `@host:port`:
 
 ```
-logger/listener/listen.py --cached_data S330CourseTrue,S330SpeedKt@192.168.1.10:8766
+listen --cached_data S330CourseTrue,S330SpeedKt@192.168.1.10:8766
 ```
 
 All subscribed fields use `seconds: 0` — only values that arrive after the subscription starts are returned. The `--cached_data` flag can be combined with other `listen.py` transforms and writers in the usual way:
 
 ```
-logger/listener/listen.py \
+listen \
   --cached_data S330CourseTrue,S330SpeedKt \
   --transform_prefix vessel \
   --write_logfile /var/tmp/log/s330
@@ -550,7 +550,7 @@ server.cache_record({
 If the server is started with one or more `--udp` ports, it will also accept JSON-encoded records broadcast on those ports:
 
 ```
-server/cached_data_server.py --port 8766 --udp 6225
+cached_data_server --port 8766 --udp 6225
 ```
 
 The default supervisord installation does **not** enable UDP input. To enable it, uncomment the relevant line in `scripts/start_openrvdas.sh`:

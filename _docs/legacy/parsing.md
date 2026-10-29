@@ -619,7 +619,7 @@ restructuring the definition files.
 The ParseTransform can be invoked from the command line ``listen.py`` script:
 
   ```
-  logger/listener/listen.py \
+  listen \
       --port 6224 \
       --transform_parse \
       --write_file -
@@ -631,7 +631,7 @@ parameters may be specified with additional command line arguments
 command line **before** the ``--transform_parse`` argument):
 
   ```
-  logger/listener/listen.py \
+  listen \
       --udp 6224 \
       --parse_definition_path "local/devices/*.yaml,/opt/openrvdas/local/devices/*.yaml" \
       --parse_to_json \

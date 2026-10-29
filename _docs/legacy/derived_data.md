@@ -82,33 +82,30 @@ The other widely-useful derived data transform that is available is the Interpol
     transforms:
     - class: InterpolationTransform
       kwargs:
-        back_seconds: 3600     # Retain this many seconds of back data
+        interval: 10           # Output averages every 10 seconds
+        window: 10             # Keep 10 seconds of data to average over
         metadata_interval: 20  # Send metadata every 20 seconds
         field_spec:
           AvgPortTrueWindDir:              # What to call the interpolated output
             source: PortTrueWindDir        # What field to interpolate
             algorithm:
-              type: boxcar_average      # Use 'boxcar' averaging
+              type: polar_average       # Average as an angle, so 359 and 1 give 0
               window: 10                # Use a window 10 seconds wide
-              interval: 10              # Output an average every 10 seconds
           AvgPortTrueWindSpeed:
             source: PortTrueWindSpeed
             algorithm:
               type: boxcar_average
               window: 10
-              interval: 10
           AvgStbdTrueWindDir:
             source: StbdTrueWindDir
             algorithm:
-              type: boxcar_average
+              type: polar_average
               window: 10
-              interval: 10
           AvgStbdTrueWindSpeed:
             source: StbdTrueWindSpeed
             algorithm:
               type: boxcar_average
               window: 10
-              interval: 10
 
     # Write results back to the cached data server
     writers:
@@ -117,4 +114,6 @@ The other widely-useful derived data transform that is available is the Interpol
         data_server: localhost:8766        
 ```
 
-The value associated with the 'algorithm' key should be a dict that will be passed to the interpolate() method of InterpolationTransform. At present, only 'boxcar_average', 'nearest' and 'polar_average' are defined, but the interpolation code is designed to make it easy to add other algorithms, such as Gaussian smoothing and linear and higher-order interpolations. Contributions to this code base would be very welcome.
+The value associated with the 'algorithm' key should be a dict that will be passed to the interpolate() method of InterpolationTransform. As of v2.7.0 there are many algorithms besides 'boxcar_average', 'nearest' and 'polar_average', including medians, weighted averages and window statistics for quality control; see [Averaging and Resampling: InterpolationTransform]({{ "/interpolation_transform/" | relative_url }}) for the full list and their options.
+
+For derived values that are formulas rather than averages, such as unit conversions or true winds computed step by step, see [Computed Fields: ComputedFieldsTransform]({{ "/computed_fields/" | relative_url }}). For calibrations in particular, see [Calibrated Values for Sensor Data]({{ "/cookbook/calibrated_values/" | relative_url }}).

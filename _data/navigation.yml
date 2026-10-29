@@ -1,10 +1,8 @@
 main:
   - title: "About"
     url: /about/
-  - title: "Quickstart"
-    url: /quickstart/
-  - title: "GUI Quickstart"
-    url: /quickstart_gui/
+  - title: "The Guide"
+    url: /guide/introduction/
   - title: "All the Docs"
     url: /docs/
   - title: "API Reference"
@@ -16,80 +14,162 @@ main:
   #- title: "Tags"
   #  url: /tags/
 
+# The OpenRVDAS Guide's outline. The old sidebar is cached in
+# navigation-legacy.yml; the pages it pointed to live on under
+# _docs/legacy/ until the Guide absorbs them.
 navdocs:
-  - title: Getting Started
+  - title: 1. Introduction
     children:
-      - title: "Quick-Start Guide"
-        url: /quickstart/
-      - title: "GUI Quick-Start"
-        url: /quickstart_gui/
+      - title: "Overview"
+        url: /guide/introduction/
+      - title: "What Is OpenRVDAS?"
+        url: /guide/introduction/#what-is-openrvdas
+      - title: "How It Works"
+        url: /guide/introduction/#how-it-works
+      - title: "How to Read This Guide"
+        url: /guide/introduction/#how-to-read-this-guide
 
-  - title: In-depth Fundamentals
+  - title: 2. Working with a Running Installation
     children:
-      - title: "Installation"
-        url: /install/
-      - title: "The Listener Script"
-        url: /listen_py/
-      - title: "Controlling Loggers"
-        url: /controlling_loggers/
-      - title: "A Short Introduction to YAML"
-        url: /yaml/
-      - title: "Cruise Definition Files"
-        url: /cruise_definition_files/
-      - title: "The Cached Data Server"
-        url: /cached_data_server/
+      - title: "Overview"
+        url: /guide/running-system/
+      - title: "The Web Console"
+        url: /guide/running-system/#the-web-console
+      - title: "Starting and Stopping Loggers"
+        url: /guide/running-system/#starting-and-stopping-loggers
+      - title: "Watching the Data: Displays"
+        url: /guide/running-system/#watching-the-data-displays
+      - title: "Sidebar: Advanced Data Snooping"
+        url: /guide/running-system/#sidebar-advanced-data-snooping
+      - title: "Where the Data Ends Up"
+        url: /guide/running-system/#where-the-data-ends-up
+      - title: "When Something Goes Red"
+        url: /guide/running-system/#when-something-goes-red
 
-  - title: Data Parsing
+  - title: 3. Installation
     children:
-      - title: "Record Parsing"
-        url: /parsing/
-      - title: "NMEA Device Type Library"
-        url: /nmea_device_types/
+      - title: "Overview"
+        url: /guide/installation/
+      - title: "Standard Installation"
+        url: /guide/installation/#standard-installation
+      - title: "The Python Virtual Environment"
+        url: /guide/installation/#the-python-virtual-environment
+      - title: "Minimal Installation"
+        url: /guide/installation/#minimal-installation
+      - title: "Sidebar: Choosing and Switching Consoles"
+        url: /guide/installation/#sidebar-choosing-and-switching-between-the-django-and-react-consoles
+      - title: "InfluxDB and Grafana"
+        url: /guide/installation/#influxdb-and-grafana
+      - title: "Securing the Installation"
+        url: /guide/installation/#securing-the-installation
+      - title: "Upgrading an Existing Installation"
+        url: /guide/installation/#upgrading-an-existing-installation
 
-  - title: Reference
+  - title: "4. Tutorial: The NBP Sample Cruise"
     children:
-      - title: "Component API Reference"
-        url: /api_reference/
-
-  - title: Graphs and Displays
-    children:
-      - title: "Display Widgets"
-        url: /display_widgets/
-      - title: "Grafana/Influx-Based Displays"
-        url: /grafana_displays/
-      - title: "Grafana Live"
-        url: /grafana_live/
-  - title: Cookbook
-    children:
+      - title: "Overview"
+        url: /guide/nbp-tutorial/
       - title: "Simulating Live Data"
-        url: /simulating_live_data/
-      - title: "Working with Secure Websockets"
-        url: /secure_websockets/
-      - title: "Adding a Sensor"
-        url: /adding_a_sensor/
-      - title: "Geofencing"
-        url: /geofencing/
-      - title: "Derived Data"
-        url: /derived_data/
-      - title: "Calibrated Values"
-        url: /cookbook/calibrated_values/
-      - title: "InfluxDB Shoreside Replication"
-        url: /cookbook/influxdb_shoreside_replication/
-      - title: "Grafana Feed Status Dashboard"
-        url: /cookbook/grafana_feed_status_dashboard/
+        url: /guide/nbp-tutorial/#simulating-live-data
+      - title: "Loading the Cruise Definition"
+        url: /guide/nbp-tutorial/#loading-the-cruise-definition-and-starting-loggers
+      - title: "Following a Record Through the System"
+        url: /guide/nbp-tutorial/#following-a-record-through-the-system
+      - title: "Exploring with listen"
+        url: /guide/nbp-tutorial/#exploring-with-listen
 
-  - title: Reference
+  - title: 5. Setting Up Your Own Vessel
     children:
+      - title: "Overview"
+        url: /guide/your-vessel/
+      - title: "Your Institution's Repository and local/"
+        url: /guide/your-vessel/#your-institutions-repository-and-local
+      - title: "Writing a Cruise Definition"
+        url: /guide/your-vessel/#writing-a-cruise-definition
+      - title: "Creating and Testing Loggers"
+        url: /guide/your-vessel/#creating-and-testing-loggers
+      - title: "Readers for Your Hardware"
+        url: /guide/your-vessel/#readers-for-your-hardware
+      - title: "Parsing and Device Types"
+        url: /guide/your-vessel/#parsing-and-device-types
+      - title: "Worked Example: Adding a Sensor"
+        url: /guide/your-vessel/#worked-example-adding-a-sensor
+
+  - title: 6. Computed and Calibrated Values
+    children:
+      - title: "Overview"
+        url: /guide/computed-values/
+      - title: "Computed Fields"
+        url: /guide/computed-values/#computed-fields
+      - title: "Calibrations"
+        url: /guide/computed-values/#calibrations
+      - title: "Averaging and Resampling"
+        url: /guide/computed-values/#averaging-and-resampling
+      - title: "Derived Data Loggers"
+        url: /guide/computed-values/#derived-data-loggers
+
+  - title: 7. Storage, Displays and Distribution
+    children:
+      - title: "Overview"
+        url: /guide/storage-displays/
+      - title: "The Cached Data Server"
+        url: /guide/storage-displays/#the-cached-data-server
+      - title: "External Databases"
+        url: /guide/storage-displays/#external-databases
+      - title: "Displays"
+        url: /guide/storage-displays/#displays
+      - title: "Shoreside Replication"
+        url: /guide/storage-displays/#shoreside-replication
+      - title: "Distribution and Load Balancing"
+        url: /guide/storage-displays/#distribution-and-load-balancing
+
+  - title: 8. Operations and Recordkeeping
+    children:
+      - title: "Overview"
+        url: /guide/operations/
+      - title: "Snapshots and the State Journal"
+        url: /guide/operations/#snapshots-and-the-state-journal
+      - title: "Command-Line and API Control"
+        url: /guide/operations/#command-line-and-api-control
+      - title: "Geofencing and Conditional Control"
+        url: /guide/operations/#geofencing-and-conditional-control
+
+  - title: 9. Troubleshooting
+    children:
+      - title: "Overview"
+        url: /guide/troubleshooting/
+      - title: "Where to Look"
+        url: /guide/troubleshooting/#where-to-look
+      - title: "Common Failure Modes"
+        url: /guide/troubleshooting/#common-failure-modes
+      - title: "Isolating Problems with listen"
+        url: /guide/troubleshooting/#isolating-problems-with-listen
+      - title: "Monitoring Feed Health"
+        url: /guide/troubleshooting/#monitoring-feed-health
+
+  - title: 10. Reference
+    children:
+      - title: "Overview"
+        url: /guide/reference/
+      - title: "Component Catalog"
+        url: /guide/reference/#component-catalog
+      - title: "API Reference"
+        url: /guide/reference/#api-reference
+      - title: "YAML Syntax"
+        url: /guide/reference/#yaml-syntax
+      - title: "Type Hints"
+        url: /guide/reference/#type-hints
       - title: "Glossary"
-        url: /glossary/
-      - title: "Reading from Serial Ports"
-        url: /serial_readers/
-      - title: "Reading from Modbus Devices"
-        url: /modbus_readers/
+        url: /guide/reference/#glossary
       - title: "Security Assumptions"
-        url: /security/
-      - title: "Using Type Hints"
-        url: /type_hints/
+        url: /guide/reference/#security-assumptions
+      - title: "Further Resources"
+        url: /guide/reference/#further-resources
+
+  - title: Legacy
+    children:
+      - title: "All legacy pages"
+        url: /docs/
 
   - title: Links
     children:
@@ -99,13 +179,3 @@ navdocs:
       - title: "GitHub Repository"
         icon: "fab fa-fw fa-github"
         url: "https://github.com/OceanDataTools/openrvdas"
-  - title: Extras
-    children:
-      - title: "RVTEC 2019 Introduction PDF"
-        icon: "fas fa-fw fa-link"
-        url: /assets/files/rvtec-2019-openrvdas-intro.pdf
-        external: true
-      - title: "RVTEC 2024 Ocean Data Tools Session"
-        icon: "fas fa-fw fa-link"
-        url: "https://www.youtube.com/watch?v=lRGulusX4sQ"
-        external: true

@@ -7,9 +7,12 @@ toc_label: "Contents"
 toc_icon: "list"
 toc_sticky: true  # Makes the TOC stick on scroll
 ---
-At the time of this writing OpenRVDAS has been built and tested against MacOS X, CentOS 7-9, Rocky 8-9, Ubuntu 18-23
-and Raspbian operating systems. It may be possible to build against other Linux-based operating systems, and guides
-will be added here as they are verified and documented.
+As of v2.7.0, OpenRVDAS officially supports Ubuntu 22.04 through 25.10 (and Linux Mint 22), Debian 12 including
+Raspberry Pi OS "bookworm", RHEL/Rocky/AlmaLinux 9 and 10, and MacOS; the installer refuses older releases before
+installing anything. The preferred distribution, all other things being equal, is the latest release of Ubuntu. It may
+be possible to build against other Linux-based operating systems, and guides will be added here as they are verified
+and documented. The current requirements are in the Guide's
+[Installation]({{ "/guide/installation/" | relative_url }}) section.
 
 You will need to be able to run the ``sudo`` command. To begin installation, grab the script from Github and run from
 the command line using the following commands:
@@ -286,19 +289,22 @@ source /opt/openrvdas/venv/bin/activate
 ```
 
 (The exact path is printed at the end of the installation.) The primary effect of this activation is to modify the default path searched for binaries
-so that invoking ``python`` uses the version at ``venv/bin/python`` rather than the default system path. Once activated,
-OpenRVDAS scripts may be run by invoking their location, e.g.:
+so that invoking ``python`` uses the version at ``venv/bin/python`` rather than the default system path, and so that
+OpenRVDAS's commands, such as ``listen``, ``logger_manager``, ``lmcmd``, ``validate_config`` and ``config_snapshot``, can
+be run by name. Run them from the OpenRVDAS directory (e.g. ``/opt/openrvdas``), since relative paths in configurations and
+on the command line are resolved against the current directory. E.g.:
 ```
-logger/listener/listen.py --udp 6204 --write_file /var/log/udp_6204.txt
+listen --udp 6204 --write_file /var/log/udp_6204.txt
 ```
 To deactivate the virtual environment, run the ``deactivate`` command.
 
-OpenRVDAS scripts may be run outside the virtual environment by specifying the path to the executable to be use on the
-command line. E.g.
+OpenRVDAS commands may be run without activating the virtual environment by giving their path in the virtual
+environment. E.g.
 
 ```
-venv/bin/python logger/listener/listen.py --udp 6204 --write_file /var/log/udp_6204.txt
+venv/bin/listen --udp 6204 --write_file /var/log/udp_6204.txt
 ```
-This latter method is how the servers are configured to run inside the supervisor's config file at
+The servers are run in a similar way by the supervisor's config file, which runs each script with the virtual
+environment's Python (e.g. ``venv/bin/python server/logger_manager.py``), at
 ``/etc/supervisor.d/openrvdas.ini`` (Ubuntu: ``/etc/supervisor/conf.d/openrvdas.conf``,
 MacOS: ``/usr/local/etc/supervisor.d/openrvdas.ini``).

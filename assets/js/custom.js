@@ -31,8 +31,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear title content
     title.textContent = '';
 
-    // Create text span
-    const textSpan = document.createElement('span');
+    // Get the submenu
+    const submenu = title.nextElementSibling;
+    if (!submenu || submenu.tagName !== 'UL') return;
+
+    // The section heading links to its first child's destination (the
+    // section's landing page), so clicking the heading text navigates
+    // there. External first links (e.g. the Links section) are left as
+    // plain toggles.
+    const firstLink = submenu.querySelector('a');
+    const firstHref = firstLink ? firstLink.getAttribute('href') : null;
+    const isInternal = firstHref && firstHref.charAt(0) === '/';
+
+    // Create text span: an anchor when we have an internal target,
+    // otherwise a plain span that toggles like the rest of the title.
+    let textSpan;
+    if (isInternal) {
+      textSpan = document.createElement('a');
+      textSpan.href = firstHref;
+      textSpan.className = 'nav-section-link';
+      // Let the browser follow the link without also firing the
+      // title's toggle handler.
+      textSpan.onclick = function(event) {
+        event.stopPropagation();
+      };
+    } else {
+      textSpan = document.createElement('span');
+    }
     textSpan.textContent = titleText;
 
     // Create toggle indicator
@@ -44,10 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Append text and toggle to title
     title.appendChild(textSpan);
     title.appendChild(toggle);
-
-    // Get the submenu
-    const submenu = title.nextElementSibling;
-    if (!submenu || submenu.tagName !== 'UL') return;
 
     // Check if this menu contains the active page
     const isActive = submenu.querySelector('a.active') !== null;
@@ -80,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Make the title look clickable
     title.style.cursor = 'pointer';
 
-    // Add click handler directly to the title element
+    // Clicking the title (the +/- toggle, or anywhere outside the
+    // heading link) expands or collapses the section. Clicking the
+    // heading text itself is handled by its anchor above.
     title.onclick = function() {
       if (submenu.style.display === 'none' || submenu.style.display === '') {
         submenu.style.display = 'block';

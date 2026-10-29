@@ -184,7 +184,7 @@ Do not guess — OpenRVDAS ships a validator that checks both YAML syntax and
 whether the structure makes sense as an OpenRVDAS configuration:
 
 ```bash
-python logger/utils/validate_config.py my_logger_config.yaml
+validate_config my_logger_config.yaml
 ```
 
 To check syntax alone, any YAML parser will do:
