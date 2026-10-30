@@ -436,9 +436,11 @@ OpenRVDAS adds types the standard set lacks, most importantly the
 *optional* variants `od`, `of`, `og`, `ow` — real instruments
 routinely emit records with empty fields, and `{SpeedKt:of}` matches
 an empty slot where `{SpeedKt:f}` would reject the whole record.
-There are also `nlat` and `nlat_dir`, which parse NMEA's
-degrees-decimal-minutes latitude and longitude straight into signed
-decimal degrees.
+There are also `nlat`, which parses NMEA's degrees-decimal-minutes
+latitude or longitude into decimal degrees (unsigned, with the
+hemisphere left in its own `N`/`S` or `E`/`W` field), and `nlat_dir`,
+which consumes the value and the hemisphere together and returns
+signed degrees, negative for south and west.
 
 **`RegexParseTransform` patterns** have no types: a regex captures
 text. Type conversion comes separately, either from a `fields`
@@ -500,11 +502,17 @@ intervals (the `metadata_interval` argument), where displays and the
 database pick it up.
 
 **You rarely start from nothing.** OpenRVDAS ships a library of NMEA
-0183 device types in `logger/devices/NMEA_0183.yaml` — thirteen
-types covering GPS and GPS/INS units, gyros and MRUs, depth
-sounders, speed logs, anemometers, weather sensors, autopilots, AIS,
-radar and more, 108 message formats in all. For a standard marine
-instrument, your work reduces to writing the *device* entry:
+0183 device types under `logger/devices/nmea_0183/`, one file per
+kind of device: GPS and GPS/INS units, gyros and MRUs, depth sounders,
+speed logs, anemometers, weather sensors, autopilots, rudder
+indicators, AIS, radar, USBL and winches, seventeen device types in
+all. `logger/devices/NMEA_0183.yaml` includes every one of those
+files, so naming it in `definition_path` (as below) loads the whole
+library; to load only what you use, name the individual files
+instead, but not both, or every type loads twice. The directory's
+`README.md` has the file-to-device-type table and the format-type
+legend. For a standard marine instrument, your work reduces to
+writing the *device* entry:
 
 ```
 devices:
@@ -515,6 +523,14 @@ devices:
       Latitude: "SeapLatitude"
       SpeedKt: "SeapSpeedKt"
 ```
+
+Four of the types come in a **`_Signed`** variant: `NMEA_GPS_Signed`,
+`NMEA_GPS_INS_Signed`, `NMEA_Autopilot_Signed` and
+`NMEA_Radar_Signed`. Each is its namesake with positions parsed by
+`nlat_dir`, so `Latitude` and `Longitude` come out as signed decimal
+degrees and there are no separate `NorS`/`EorW` fields. If anything
+downstream needs a real position, a geofence, a map, a distance, give
+the device the `_Signed` type; nothing else about the entry changes.
 
 Definitions live in YAML files — a `devices:` key, a
 `device_types:` key, and optionally `includes:` to pull in other
