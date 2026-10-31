@@ -14,10 +14,13 @@ result, and upgrading later.
 
 OpenRVDAS v2.7.0 officially supports:
 
-* **Ubuntu 22.04 through 25.10**, and Linux Mint 22;
-* **Debian 12**, including Raspberry Pi OS "bookworm";
-* **RHEL, Rocky Linux and AlmaLinux 9 and 10**;
+* **Ubuntu 22.04 and later**, and Linux Mint 22 and later;
+* **Debian 12 and later**, including Raspberry Pi OS "bookworm";
+* **RHEL, Rocky Linux and AlmaLinux 9 and later**;
 * **macOS**.
+
+If run on a distribution newer than the installer has been tested on, the installer will attempt to run, but will issue a warning. Ubuntu- and Debian-based distributions such as Pop!_OS
+and LMDE are installed as their base distribution.
 
 All other things being equal, the preferred distribution is Ubuntu 25.10.
 
@@ -383,6 +386,14 @@ Upgrading to v2.7.0 from an earlier release, expect these changes:
   snapshots, which earlier preference files won't have answers for.
 * **The consoles display the code version**, so after the upgrade you
   can confirm at a glance what's running.
+* **Python 3.11 is required.** A virtual environment built on an
+  older Python can't be updated in place: `pip install -e .` will
+  refuse. Rerun the installer, which builds a new one with a suitable
+  interpreter, installing it first if the system lacks one.
+* **Fewer platforms.** Ubuntu 20.04 and earlier, Debian 11 and
+  earlier and RHEL/Rocky/Alma 8 and earlier are refused by the
+  installer; a machine on one of them needs a newer operating system
+  before it can run v2.7.0.
 
 After any upgrade: reload your cruise definition, confirm the mode,
 and watch the loggers go green.

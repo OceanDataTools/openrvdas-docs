@@ -385,29 +385,32 @@ Such a logger has three parts:
 
 For geofencing, the transform is a `GeofenceTransform`. It needs the
 ship's position as signed decimal degrees: negative for south and
-west. The bundled NMEA device definitions don't provide that
-directly. They give latitude and longitude as positive numbers, with
-the hemisphere in a separate field (`SeapNorS` is `N` or `S`).
-Without a conversion, the fence would be checking the wrong position
-anywhere south of the equator or west of Greenwich, including
-everywhere in the Argentine EEZ used below.
+west. The standard NMEA device types give latitude and longitude as
+positive numbers with the hemisphere in a separate field, so a GPS
+that feeds a geofence should use the `_Signed` variant of its device
+type (see
+[Parsing and Device Types]({{ "/guide/your-vessel/#parsing-and-device-types" | relative_url }})).
+The example uses the sample cruise's Seapath GPS, `seap`, an
+`NMEA_GPS_INS`. In its device definition, make it
 
-So the example uses two loggers:
+```
+devices:
+  seap:
+    device_type: "NMEA_GPS_INS_Signed"
+```
 
-* a **position logger**, which converts the GPS position to signed
-  degrees and writes it back to the cached data server, where a map
-  display or anything else that wants a signed position can use it
-  too;
-* the **geofence logger**, which reads the signed position and acts
-  on it.
+and `SeapLatitude` and `SeapLongitude` are signed from the parser
+on. (The `NorS` and `EorW` lines in its `fields` mapping can go; the
+signed type never produces them.) Skipping this step raises no error;
+it just gives you a fence checking the wrong position anywhere south
+of the equator or west of Greenwich, including everywhere in the
+Argentine EEZ used below.
 
-Both read from the cached data server, not from the UDP broadcast.
-The broadcast carries raw records; the named, parsed fields only
-exist once the `parse_data` logger has parsed them. The example uses
-the sample cruise's Seapath GPS (`seap`).
+The logger reads from the cached data server, not from the UDP
+broadcast. The broadcast carries raw records; the named, parsed
+fields only exist once the `parse_data` logger has parsed them.
 
-**The position logger** is a derived-data logger of the kind described
-in [section 6]({{ "/guide/computed-values/#derived-data-loggers" | relative_url }}):
+**The geofence logger** needs nothing but the three parts:
 
 ```
 readers:
@@ -417,60 +420,14 @@ readers:
     subscription:
       fields:
         SeapLatitude: {seconds: 0}
-        SeapNorS: {seconds: 0}
         SeapLongitude: {seconds: 0}
-        SeapEorW: {seconds: 0}
-
-transforms:
-  - class: ComputedFieldsTransform
-    kwargs:
-      update_on_fields: [SeapLatitude]
-      max_field_age: {SeapNorS: 10, SeapLongitude: 10, SeapEorW: 10}
-      delete_input_fields: true
-      delete_other_fields: true
-      fields:
-        SeapSignedLatitude:
-          equation: "lat * (-1 if ns == 'S' else 1)"
-          inputs: {lat: SeapLatitude, ns: SeapNorS}
-        SeapSignedLongitude:
-          equation: "lon * (-1 if ew == 'W' else 1)"
-          inputs: {lon: SeapLongitude, ew: SeapEorW}
-
-writers:
-  class: CachedDataWriter
-  kwargs:
-    data_server: localhost:8766
-```
-
-Each time a new latitude arrives, this computes `SeapSignedLatitude`
-and `SeapSignedLongitude` from the latest values of the four input
-fields and publishes them together in one record. (The caching
-options are explained under
-[Computed Fields]({{ "/guide/computed-values/#computed-fields" | relative_url }}).)
-To check it, with the system in a mode that parses data:
-
-```
-listen --cached_data SeapSignedLatitude,SeapSignedLongitude
-```
-
-**The geofence logger** then needs nothing but the three parts:
-
-```
-readers:
-  class: CachedDataReader
-  kwargs:
-    data_server: localhost:8766
-    subscription:
-      fields:
-        SeapSignedLatitude: {seconds: 0}
-        SeapSignedLongitude: {seconds: 0}
 
 transforms:
   - class: GeofenceTransform
     module: logger.transforms.geofence_transform
     kwargs:
-      latitude_field_name: SeapSignedLatitude
-      longitude_field_name: SeapSignedLongitude
+      latitude_field_name: SeapLatitude
+      longitude_field_name: SeapLongitude
       boundary_file_name: local/uuw/mvp/boundaries/argentina_eez.gml
       entering_boundary_message: set_active_mode eez
       leaving_boundary_message: set_active_mode underway
@@ -487,9 +444,9 @@ writers:
 
 Here's what happens:
 
-1. The `CachedDataReader` receives the signed position. Because the
-   position logger publishes latitude and longitude together, they
-   arrive together, in one record.
+1. The `CachedDataReader` receives the position. Latitude and
+   longitude come from the same NMEA sentence, so they arrive
+   together, in one record.
 2. The `GeofenceTransform` compares each position with the boundary.
    When the ship crosses into the boundary, it outputs
    `set_active_mode eez`. When the ship crosses out, it outputs
@@ -502,19 +459,9 @@ Here's what happens:
 Boundary files are in GML format. EEZ boundaries can be downloaded
 from [marineregions.org](https://marineregions.org/eezsearch.php).
 
-The conversion step could instead be done by the parser. OpenRVDAS
-has an `nlat_dir` format type that parses an NMEA position together
-with its hemisphere letter straight into signed degrees. A device
-type written with it would publish signed positions from the start,
-and the position logger wouldn't be needed. The bundled NMEA
-definitions use the plain `nlat` type, so for now the position logger
-is the simplest route.
-
-**Where to put the two loggers.** Both go in the cruise definition
-like any other logger, with a configuration for each mode. The
-position logger should run in every mode where anything uses its
-output, which usually means every mode except `off`. For the geofence
-logger, two things follow from how the transform works:
+**Where to put the logger.** It goes in the cruise definition like
+any other logger, with a configuration for each mode. Two things
+follow from how the transform works:
 
 * The transform treats the first position it sees as a crossing. So
   as soon as the logger starts, it will set the mode to match where
