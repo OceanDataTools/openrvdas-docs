@@ -32,6 +32,8 @@ description: >- # this means to ignore newlines until "baseurl:"
 github_username: oceandatatools
 minimal_mistakes_skin: default
 search: true
+# Index the full text of each page; by default lunr only sees the first 50 words.
+search_full_content: true
 
 # Build settings
 markdown: kramdown
