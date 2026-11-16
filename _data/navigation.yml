@@ -179,3 +179,6 @@ navdocs:
       - title: "GitHub Repository"
         icon: "fab fa-fw fa-github"
         url: "https://github.com/OceanDataTools/openrvdas"
+      - title: "RVTEC 2026 Training Slides (PDF)"
+        icon: "fas fa-fw fa-file-pdf"
+        url: /assets/files/rvtec-2026-working-onboard-with-openrvdas.pdf
