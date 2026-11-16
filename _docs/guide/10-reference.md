@@ -709,11 +709,14 @@ network in the clear.
 
 # Further Resources
 
-* [RVTEC 2019 OpenRVDAS introduction (PDF)]({{ "/assets/files/rvtec-2019-openrvdas-intro.pdf" | relative_url }})
-* [RVTEC 2024 Ocean Data Tools session (video)](https://www.youtube.com/watch?v=lRGulusX4sQ)
+* [RVTEC 2026: Working Onboard with OpenRVDAS (PDF)]({{ "/assets/files/rvtec-2026-working-onboard-with-openrvdas.pdf" | relative_url }}):
+  training slides for marine technicians
 * [Ocean Data Tools home](https://oceandata.tools)
 * [OpenRVDAS on GitHub](https://github.com/OceanDataTools/openrvdas), where
   bugs are reported and pull requests are welcome
 * [The legacy documentation]({{ "/docs/" | relative_url }}): the
   standalone pages this Guide replaced, kept for their worked examples
   until each is absorbed
+* Earlier presentations, which describe older versions of OpenRVDAS:
+  [RVTEC 2024 Ocean Data Tools session (video)](https://www.youtube.com/watch?v=lRGulusX4sQ),
+  [RVTEC 2019 OpenRVDAS introduction (PDF)]({{ "/assets/files/rvtec-2019-openrvdas-intro.pdf" | relative_url }})
